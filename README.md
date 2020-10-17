@@ -1468,13 +1468,13 @@
 >- MSS: 최대 세그먼트 크기(maximum segment size)
 >  - 세그먼트의 데이터 필드의 크기 제한
 >  - 사이즈 큰 파일 전송할 때, MSS 크기로 파일 자른다.
->  
+> 
 >- connection-oriented:
 >
 >- '3 way handshaking'을 통해 데이터 교환 전에 송수신자의 상태를 초기화한다.
->  
+> 
 >  - TCP를 연결 지향이라고 부르는 이유이다.
->  
+> 
 >- flow controlled:
 >
 >   송신자는 수신자가 받을 수 있을 만큼만 보낸다.
