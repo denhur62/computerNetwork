@@ -2109,7 +2109,7 @@
 >>- 패킷이 도착하면 입력 포트는 라우팅 프로세서에게 인터럽트를 보내 패킷을 프로세서 메모리에 복사한다. (패킷은 시스템 메모리에 카피됨)
 >>- 속도는 메모리 bandwidth에 의해 제한된다. (데이터그램 당 2 bus crossings)
 >
->#### switching vai a bus
+>#### switching via bus
 >
 >>![image-20201012195145308](컴퓨터 네트워크 용어 정리.assets/image-20201012195145308.png)
 >>
@@ -2131,7 +2131,15 @@
 >>
 >>보다 정교한 기술로  데이터그램을 고정된 길이 셀로 분할하고, 스위치 구조을 통해 셀을 전환한다.
 >>
->>여러 단계의 스위칭 요소를 사용하기 때문에 시스코 CRS는 3단계 논 블로킹 스위칭 전략을 사용한다.
+>>여러 단계의 스위칭 요소를 사용하기 때문에 시스코 CRS는 3단계 **논 블로킹 스위칭 전략**을 사용한다.
+>
+>#### how many buffer demand
+>
+>>버퍼링: B, 평균 왕복 시간: RTT(250msec), C: 링크 용량
+>>
+>>B = RTT*C  -> 상대적으로 작은 양의 TCP 흐름에 대한 큐잉 분석
+>>
+>>많은 수의 TCP 흐름(n)이 링크를 통과할 때, 필요한 버퍼링은 RTT∗C/루트N 이다.
 >
 >#### input prot queuing
 >
@@ -2139,17 +2147,58 @@
 >>
 >>- 입력 회선을 통해 도착하는 모든 패킷을 전송하기에 스위치 구조가 충분히 빠르지 않다면  queuing지연과 손실이 발생한다. (인풋  버퍼 오버플로우)
 >>
->>- Head-of-the-Line(HOL) blocking: 
+>>- Head-of-the-Line**(HOL) blocking**: 
 >>
->>  입력 포트에 있는 서로 다른 2개의 패킷이 같은 출력 포트(빨간색)을 향해 간다. 이 중 한 패킷은 차단되고 입력 큐에서 기다려야 한다 => **HOL blocking**
+>> 입력 포트에 있는 서로 다른 2개의 패킷이 같은 출력 포트(빨간색)을 향해 간다. 이 중 한 패킷은 차단되고 입력 큐에서 기다려야 한다 
+>>
+>>입력 링크에서 패킷 도착속도가 용량의 58%가 되면 HOL차단 때문에 입력 큐가 무한정 길이로 증가함을 보여준다.
 >
->**Output ports**
+>**Output ports** **queuing**
 >
 >>![image-20201012200153357](컴퓨터 네트워크 용어 정리.assets/image-20201012200153357.png)
 >>
 >>- 전송 속도보다 데이터그램 도착 속도가 더 빠르다면 **버퍼링**이 필요하다
->>- **scheduling discipline**은 전송되길 기다리는 (queued)데이타그램 사이에서 고른다
 >>
+>>  패킷은 혼잡이나 버퍼의 크기가 작으면 손실날 수 있기 때문이다. 
 >>
+>>- **scheduling discipline**은 전송되길 기다리는 (queued)데이타그램 사이에서 최고의
+>>
+>>  효율을 내는 것을 고른다.
+>>
+>>버퍼가 커지면 라우터의 메모리가 소모될 수 있으며
+>>
+>>패킷을 저장 할 수 있는 메모리가 없을때 패킷 손실 발생한다.
+>
+>#### Router external connections
+>
+>>![image-20201027202708451](README.assets/image-20201027202708451.png)
+>>
+>>![image-20201027202715280](README.assets/image-20201027202715280.png)
 
+### **The Internet network layer**
+
+>![image-20201027203809040](README.assets/image-20201027203809040.png)
+>
+>- Routing protocol: 패킷이 목적지까지 가는 경로 결정 - static과 dynamic 프로토콜로 구분됨
+>- path selection - 다익스트라, 벨만 포드 등에서 선택
+>- RIP: Routing Information Protocol -> 네트워크 구조상 계층은 없고 평면적인 프로토콜(자주사용)
+>- OSPF: Open Shortest Path First     -> 최단 경로 우선 프로토콜
+>- BGP: Border Gateway Protocol      -> 외부 라이팅 프로토콜
+>
+>*  ICMP(Internet Control Message Protocol): 인터넷 제어 메시지 프로토콜
+>
+>  ​    오류 메시지를 전송받는데 주로 쓰임(ping)
+
+#### **IP datagram format**
+
+>![image-20201027204248325](README.assets/image-20201027204248325.png)
+>
+>- TTL(Time to live) - 라우팅 잘못하면 루프가 생길 수 있는데 TTL이 이를 방지한다.
+>  - 라우터마다 1씩 감소하고 0이 되면 버려짐
+>- identifier, flags, fragment offset - IP fragment(단편화)와 관계있다.
+>  - IP의 새로운 버전인 IPv6는 단편화를 허용하지 않는다.
+>- upper layer(protocol) - 일반적으로 IP 데이터그램이 최종 목적지에 도착했을 때만 사용되는 필드
+>  - 이 필드 값은 IP 데이터그램에서 데이터 부분이 전달될 목적지의 전송 계층의 특정 프로토콜을 명시한다.\
+>- header checksum - 라우터가 수신한 IP 데이터그램의 비트 오류를 탐지하는데 도움을 줌
+>
 >
