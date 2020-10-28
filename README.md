@@ -2409,3 +2409,63 @@
 >>- DHCP 서버 캡슐화, 클라이언트에 프레임 전달, 클라이언트에서 DHCP로 demuxing
 >>- 이제 클라이언트는 자신의 IP주소, name, DSN 서버의 IP 주소, 자신의 first-hop router를 알게 된다.
 
+#### 주소 블록 획득
+
+>![image-20201028222352136](README.assets/image-20201028222352136.png)
+>
+>ISP로부터 주소를 획득하는 것은 주소 블록을 얻는 한 방법이지만 다른 방법도 있다.
+>
+>ISP도 주소 블록을 얻기 위한 방법이 있어야 하는데 이러한 IP주소는 ICANN(Internet Corporation for Assigned Names and Numbers)을 기반으로 관리한다.
+
+#### NAT: network address translation
+
+>![image-20201028222606226](README.assets/image-20201028222606226.png)
+>
+>- motivation: 로컬 네트워크는 오로지 한 개의 IP 주소만 가진다.
+>  - ISP로부터 필요하지 않은 주소 범위: 모든 디바이스를 위해 단 하나의 IP 주소만 있으면 된다.
+>  - 바깥 세상과으로부터 독립됨:
+>    - 밖에 알리지 않고 로컬 네트워크에 있는 디바이스의 주소를 바꿀 수 있다.
+>    - 로컬 네트워크의 주소를 바꾸지 않고 ISP를 바꿀 수 있다.
+>    - 로컬 net에 있는 디바이스는 바깥세상에 의해 명시적으로 addressable, visible하지 않는다.
+>  - 하나의 네트워크 망에서 여러 개의 디바이스들이 존재할 때, 그들 각각에게 실제 IP를 하나씩 주게 되면 IP를 너무 많이 필요로 한다. -> 이를 해결하는 방법이 NAT(네트워크 주소 변환) 
+>    - 현재 사용 중인 IPv4 주소가 많이 남아있지 않음
+>
+>implementation: NAT router must:
+>
+>- outgoing datagrams: 모든 나가는 데이터그램의 (출발지 IP 주소, 포트 번호)를 (NAT IP 주소, 새로운 포트 번호 -> 목적지 주소로 사용)로 대체한다.
+>- 모든 (출발지 IP 주소, 포트 번호)->(NAT IP 주소, 새로운 포트 번호) 변환 쌍을 **NAT translation table**에 기록한다.
+>- incoming datagrams: 들어오는 데이터그램의 목적지 필드에 있는 (NAT IP 주소, 새로운 포트 번호)를 NAT 테이블 내의 상응하는 (출발지 IP 주소, 포트 번호)로 바꾼다.
+>
+>![image-20201028223353575](README.assets/image-20201028223353575.png)
+>
+>- 외부에서 보기에는 하나의 IP 주소인(138.76.29.7)만 알고 있다.
+>- NAT 라우터는 ISP의 DHCP 서버로부터 IP 주소를 얻고, NAT-DHCP-라우터로 제어되는 홈 네트워크의 주소 공간에서 DHCP 서버를 실행하여 컴퓨터에게 주소를 제공
+>- 16bit의 port-number field:
+>  - 하나의 LAN 주소로 동시에 60,000개의 연결이 가능
+>  - [(WAN side addr) 138.76.29.7, 5001]이랑 [(LAN side addr) 10.0.0.1, 3345]를 바인딩한 것 => flow
+>  - 60,000개의 flow를 생성할 수 있다는 말
+>
+>* NAT은 논란의 여지가 있다.
+>
+>- 라우터는 3계층까지만 처리해야 한다.
+>- end-to-end 법칙을 위반함
+>  - host가 중간 노드에서 (IP 주소, 포트 번호) 수정 없이 직접 통신해야 한다는 원칙을 어김
+>  - 장점: 경제적
+>  - 단점: 인터넷 원칙을 어김 (smart end, dump middle)
+>- NAT 대신 IPv6로 주소 부족 문제를 해결해야 한다. -> 라고 NAT 사용 반대하는 사람들의 주장
+
+#### **IPv6: motivation**
+
+>- 초기 동기: 32bit 주소 공간이 곧 완전히 할당될 것이다. (남은 게 얼마 없음)
+>- 추가적인 동기:
+>  - 헤더 포멧이 빠른 처리(processing)&전송(forwarding)을 도와줌
+>  - 헤더는 QoS(Quality of Service)가 용이하도록 도와줌
+>- IPv6 데이터그램 형식:
+>  - 고정된 길이의 40byte 헤더
+>    - IPv4는 20byte
+>  - fragmentation 허용 안 함
+
+#### IPv6 datagram format
+
+>
+>
