@@ -2456,7 +2456,7 @@
 
 #### **IPv6: motivation**
 
->- 초기 동기: 32bit 주소 공간이 곧 완전히 할당될 것이다. (남은 게 얼마 없음)
+>- 초기 동기: 32bit 주소 공간이 곧 완전히 할당될 것이다. (남은 게 얼마 없음) ->128bit로 늘림
 >- 추가적인 동기:
 >  - 헤더 포멧이 빠른 처리(processing)&전송(forwarding)을 도와줌
 >  - 헤더는 QoS(Quality of Service)가 용이하도록 도와줌
@@ -2464,8 +2464,45 @@
 >  - 고정된 길이의 40byte 헤더
 >    - IPv4는 20byte
 >  - fragmentation 허용 안 함
+>- **흐름 라벨링:**
+>  - 높은 사용자 우선 순위를 가지고 전달된 트래픽 또한 흐름으로 처리 가능
 
 #### IPv6 datagram format
 
+>![image-20201028224439556](README.assets/image-20201028224439556.png)
 >
+>- **priority**: flow 안의 데이터그램 사이의 우선순위를 식별
+>- **flow label**: 같은 flow 안의 데이터그램을 식별 (데이터그램의 흐름을 인식)
+>- **next header**: 데이터를 위한 상위 계층 프로토콜을 식별
+>- IPv4로부터 변화
+>  - **checksum**: 각 hop에서 처리 시간을 줄이기 위해 전체 제거함
+>  - **options**: 허락하지만 헤더 밖에서만. "Next header" field로 나타냄
+>- **ICMPv6**: ICMP의 새로운 버전
+>  - 추가적인 메시지 타입. 예: "Packet too big"
+>  - multicast group management functions (멀티캐스트 그룹 관리 기능)
 >
+>**ICMP: Internet control message protocol**
+>
+>>- 호스트와 라우터 사이에서 network-layer 정보를 전달하는 데 사용
+>>  - 에러 보고: 호스트, 네트워크, 포트, 프로토콜에 도달하지 못함
+>>  - echo request/reply (ping을 사용하여)
+>>- IP의 상위인 네트워크 계층:
+>>  - IP에서 ICMP msg를 운반
+>>- ICMP 메시지: Type, code, 에러가 발생한 IP 데이터그램의 첫 8바이트
+
+#### Transition from IPv4 to IPv6 (**IPv4에서 IPv6로의 변화**)
+
+>![image-20201028224741661](README.assets/image-20201028224741661.png)
+>
+>모든 라우터가 동시에 업그레이드될 수 없다.
+>
+>- no "flow days"
+>- 어떻게 IPv4와 IPv6를 섞어서 네트워크를 운영할 수 있을까?
+>
+>**Tunneling** (터널)
+>
+>>IPv4 라우터들이 IPv6 데이터그램을 IPv4의 데이터 필드에 넣어 운반
+>>
+>>![image-20201028224916110](README.assets/image-20201028224916110.png)
+>>
+>>IPv4를 지날때 IPv6 내용을 캡슐화한다. 
