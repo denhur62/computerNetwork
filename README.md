@@ -2268,7 +2268,7 @@
 >    - 즉 동일한 왼쪽 24비트를 사용한다.
 >  - 또한 4개의 인터페이스가 중계하는 라우터 없이 하나의 네트워크에 서로 연결되어 있다.
 >  - 이 네트워크는 이더넷 LAN으로 상호 연결되고 이 경우 인터페이스는 이더넷 허브나 이더넷 스위치 또는 무선 액세스 포인터로 상호 연결된다.
->  - 세 호스트들의 인터페이스들과 하나의 라우터 인터페이스로 연결된 네트워크는 **서브넷**을 구성한다고 말한다. 혹은 라우터 인터페이스 간의 연결된 네트워크도 서브넷이라고 한다. 
+>  - 세 호스트들의 인터페이스들과 하나의 라우터 인터페이스로 연결된 네트워크는 **서브넷**을 구성한다고 말한다. 혹은 서브넷을 결정하려면 먼저 호스트나 라우터에서 각 인터페이스를 분리하고 고립된 네트워크를 만든다. 이 고립된 네트워크의 종단점은 인터페이스의 끝이 된다. 이렇게 고립된 네트워크 각각을 서브넷이라고 부른다 
 >  - IP 주소체계는 이 서브넷에 223.1.1.0/24라는 주소를 할당해주는데, 여기서 /24는 **서브넷 마스크**라 부르며 32비트 주소의 왼쪽 24비트가 서브넷 주소라는 것을 가리킨다.
 >
 >
@@ -2282,4 +2282,130 @@
 >모든 호스트 비트 위치에 이진 1이 있는 IP 주소는 네트워크 주소에 예약되어 있다.
 >
 >![image-20201028152038156](README.assets/image-20201028152038156.png)
+
+#### IPv4 Addressing (Class 주소체계)
+
+>![image-20201028153246020](README.assets/image-20201028153246020.png)
+>
+>- network prefix는 네트워크 식별, host number는 특정 호스트를 식별
+>
+>  (정확히는 네트워크의 인터페이스를 식별)
+>
+>* network prefix가 얼마나 긴지 어떻게 알 수 있을까?
+>
+>- 명시적인 정의를 사용한 network prefix (class bassed addressing, A,B,C,D...)
+>  - IP 주소의 네트워크 부분을 8,16,24비트로 제한하고 각각을 A,B,C 클래스 네트워크로 분류
+>- network prefix를 유연하게 prefix/netmask로 나타냄. (classless)
+>
+>![image-20201028153425296](README.assets/image-20201028153425296.png)
+>
+>![image-20201028153506989](README.assets/image-20201028153506989.png)
+>
+>Classful IP Addresses의 문제
+>
+>1. 큰 네트워크에 비해 네트워크 주소가 너무 적음(부족)
+>2. 2계층 구조는 클래스 A 및 클래스 B 주소가 있는 대규모 네트워크에는 적합하지 않음
+>   - Fix #1: subnetting
+>3. 호스트 ip 주소가 10,000개 필요한데, 클래스 C로는 부족해서 클래스 B를 할당 받으면, 
+>   - 클래스 B = 2^(32-16) =65,000
+>   - 65000-10000개가 낭비됨
+
+#### Private IP Addresses
+
+>공용 IP 주소가 글로벌하고 표준화되어 있기 때문에 공용 네트워크에 접속하는 두 개의 기계는 동일한 IP 주소를 가질 수 없다.
+>
+>그러나 인터넷에 연결되지 않은 사설 네트워크는 사설 네트워크 내의 각 호스트가 고유하기만 하면 어떤 호스트 주소도 사용할 수 있다.
+>
+>RFC 1918은 개인용, 내부용 IP 주소의 블록 3개를 따로 설정한다.
+>
+>개인 주소를 사용하여 인터넷에 네트워크를 연결하려면 NAT(네트워크 주소 변환)을 사용하여 개인 주소를 공용 주소로 변환해야 한다.
+
+#### IP addressing: CIDR
+
+>**CIDR: Classless Inter Domain Routing**
+>
+>서브넷 주소체계 표기를 일반화 한것
+>
+>32비트 IP주소를 network prefix, host number로 나누고 이것을 다시 점으로 된 십진수 형태의 
+>
+>**a.b.c.d/x** 를 가지며 여기서 x는 주소 첫 부분의 비트수이다.  혹은 MSB(most significant bit) 최상위 비
+>
+>트라고 말한다. 이를 **프리픽스** 또는 네트워크 프리픽스라고 한다. 
+>
+>호스트 넘버로 특정 호스트를 식별한다. 
+
+#### DHCP
+
+>**DHCP: Dynamic Host Configuration Protocol:**
+>
+>호스트에 IP주소를 할당하는 것은 수동으로 구성이 가능하지만 DHCP를 많이 사용한다. 
+>
+>DHCP는 호스트 IP주소의 할당 뿐만 아니라, 서브넷 마스크, 홉 라우터 주소나 로컬 DNS  서버 주소같은 추가 정보를 얻게 해준다.
+>
+>네트워크에서 자동으로 호스트와 연결해주는 DHCP의 능력 때문에 플러그 앤 플레이(plug -and -play)
+>
+>혹은 제로 구성 프로토콜(zero-configuration protocol) 이라고 말한다.
+>
+>**호스트가 네트워크에 가입할 때 호스트가 네트워크 서버에서 IP 주소를 동적으로 가져올 수 있도록 허용한다.**
+>
+>>사용 중인 주소의 리스를 갱신할 수 있다.
+>>
+>>**주소 재사용 허용**(연결/설정 중에만 주소 유지) 및 주소가 바뀔수 있다.
+>>
+>>네트워크에 가입하려는 모바일 사용자 지원(더 빠른 시간)
+>
+>- host broadcasts "DHCP 발견" 메시지 [optional] - 호스트가 DHCP 서버 발견 메시지 발송
+>- DHCP 서버는 "DHCP 제공" msg로 응답 [optional] - 
+>- host는 "DHCP request" msg로 IP 주소 요청
+>- DHCP 서버는 "DHCP ack" msg로 주소 보냄
+>- ![image-20201028154633200](README.assets/image-20201028154633200.png)
+>- 여기서의 yiaddr은 새롭게 도착한 클라이언트에 할당된 주소이다.
+>
+>**DHCP 기본 동작 원리**
+>
+>>1. DHCP discover (서버 발견)
+>>
+>>   - device가 부팅되면 동일 서브넷에 위치한 DHCP 서버를 찾기 위해 **DHCP discover message**를 이더넷 망에 브로드캐스팅한다. (IP dest:FF-FF-FF-FF-FF)
+>>
+>>     메세지 내의 목적지 IP주소를 255.255.255.255.255.portnumber 로 설정하며 위의 사진은 포트 번호가 67인 것이다. 그리고 출발지 IP주소는 0.0.0.0 으로 설정한다.
+>>
+>>2. DHCP offer (서버 제공)
+>>
+>>   - DHCP discover 메시지를 수신한 DHCP 서버는 **DHCP offer message** broadcast 또는 unicast로 클라이언트에게 전송한다. 여기에는 장치(클라이언트)에게 임대해 줄 IP 주소와 자신의 IP 주소가 포함되어 있다. 또 한 라이언트의 IP 주소, Subnet mask, Default gateway IP 주소, DNS 서버 IP 주소, LifeTime(IP 주소 임대 시간)도 포함하고 있다.
+>>
+>>3. DHCP request (요청)
+>>
+>>   - 클라이언트는 DHCP offer 메시지로부터 받은 네트워크 정보들을 사용하겠다고 요청
+>>
+>>4. DHCP ACK
+>>
+>>   - 서버는 DHCP 요청 메세지에 대해 요청된 파라미터를 확인하는 DHCP ACK 메세지로 응답한다.
+>
+>**DHCP: more than IP addresses**
+>
+>>DHCP는 서브넷에서 할당받은 IP 주소 외에도 다음 정보를 전달
+>>
+>>- 고객의 first-hop router의 주소
+>>- DNS 서버의 이름과 IP 주소
+>>- network mask ( network host portion of address)
+>
+>#### DHCP 예시
+>
+>>![image-20201028162230911](README.assets/image-20201028162230911.png)
+>>
+>>- 노트북과 연결하기 위해서는 IP 주소, first-hop router 주소, DNS 서버 주소가 필요하다: use DHCP
+>>- DHCP는 UDP로 캡슐화되고, IP로 캡슐화되고, 802.1 Ethernet으로 캡슐화된다.
+>>- Ethernet frame은 LAN으로 broadcast(dest:FFFFFFFFFFFF), 작동되는 DHCP 서버에서 받음
+>>- Ethernet은 IP demuxed로 demuxed되고, UDP는 DHCP로 demuxed된다.
+>>
+>>- unicast: 1대 1 통신 ,multicast: 1대 다 통신
+>>- broadcast: 전체 통신 (원하지 않더라도 모두에게 패킷 다 보냄)
+>>- DHCP는 unicast 안됨
+>>  - why? IP 주소를 모르니까 => 그래서 broadcast 함
+>>
+>>![image-20201028162517354](README.assets/image-20201028162517354.png)
+>>
+>>- DCP 서버는 클라이언트의 IP 주소, 클라이이언트의 first-hop router의 IP 주소, DNS 서버의 이름 및 IP 주소를 포함하는 DHCP ACK을 공식화한다
+>>- DHCP 서버 캡슐화, 클라이언트에 프레임 전달, 클라이언트에서 DHCP로 demuxing
+>>- 이제 클라이언트는 자신의 IP주소, name, DSN 서버의 IP 주소, 자신의 first-hop router를 알게 된다.
 
