@@ -2506,3 +2506,98 @@
 >>![image-20201028224916110](README.assets/image-20201028224916110.png)
 >>
 >>IPv4를 지날때 IPv6 내용을 캡슐화한다. 
+
+#### Generalized Forwarding and SDN
+
+(일반적인 포워딩 및 소프트웨어 기반 네트워크 SDN)
+
+>![image-20201029151214494](README.assets/image-20201029151214494.png)
+>
+>
+>
+>각 라우터는 논리적으로 중앙 집중화된 라우팅 컨트롤러에 의해 계산되고 배포되는 
+>
+>**흐름 테이블**을 포함한다.
+>
+>라우터 안에 있는 **흐름 테이블**은 매치+액션 룰에 기반하여 정의된다. 
+
+#### OpenFlow data plane abstraction
+
+>- forwarding을 할때 중앙 SDN서버에서 룰을 주고 그 룰에 의해서 일반화된 forwarding
+>- flow는 해더 필드에 정의되어 있다. 
+>- OpenFlow : SDN을 하기위한 표준
+>- 외부 어떤 포트로 보낼 것인가? packet에 들어있는 정보 : source
+>- Pattern: 패킷 해더 필드 안의 value값을 매칭한다. 
+>- address가 매칭되는 부분에 대한 값이 header에 존재한다.
+>- counters : flow가 얼마나 됐는지 counter 혹은 어느 곳으로 보냈는지 count하여 네트워크의 traffic volum을 파악
+>- action :  drop, forwarding, modify(소스와 목적지를 바꾸는 것이 아니라 다른 것들을 수정하는 것), 매치된 패킷을 controller(중앙집중적인 메인서버)로 전송 -> SDN을 위해 사용되는 패킷들
+>
+>- priority : 여러개의 패턴이 있는데, 같은 범위안의 겹치는 패턴의 모호성을 없앰
+>
+>![image-20201029152616447](README.assets/image-20201029152616447.png)
+>
+>1. 1.2.*.*에서 전송하고 dest가 3.4.5.*의 모든 곳으로 가는 것들을 드랍 -> 드랍 후 재전송이있을 수있다
+>2. 모든 곳에서 전송하고 목적지가 3.4.*.* 범위 내의 것들 모두 2번으로 forwarding
+>3. 10.1.2.3 에서 전송한 데이터는 모든 dest로 가는 것들을 컨트롤러가 확인하겠다(컨트롤러에 전송) -> 컨트롤러는 local마다 하나씩 존재하여 서로 정보를 주고 받음
+
+### OpenFlow: Flow Table Entries
+
+>![image-20201029153051632](README.assets/image-20201029153051632.png)
+>
+>그림에서 보이듯이 패킷 스위치에 도달하는 링크 계층 프레임은 페이로드로 네트워크 계층 데이터 그램
+>
+>을 포함하며 전송 계층 세그먼트도 포함하고 있다. 
+>
+>OpenFlow의 일치 개념이 프로토콜 헤더의 세 계층에서 선택된 필드에 일치하도록 허용한다. 
+>
+>계층화 원칙을 무시하는 것이다. 
+>
+>SDN은 네트워크 레이어에서 사용되지만 하위 레이어(링크)에 대한 룰을 정의 가능
+>
+>Action : 포워딩, 컨트롤러로 포워딩, 드랍, 원래 프로세싱(기본 router)으로써 작동하라, 수정하라
+>
+>stats : 얼마나 많은 flow가 있었는지 counter와 Packet 
+
+#### Open flow 예시
+
+>![image-20201029153526458](README.assets/image-20201029153526458.png)
+>
+>- Destunation-based forwarding : IP Dst가 51.6.0,8로 향하는 모든 데이터그램을 받으면 port6로 forwarding하라
+>
+>- Firewall : 22번 port number로 들어오는 데이터들은 드랍
+>- 지정된 소스로부터 온 데이터는 다 드랍하라
+>- ![image-20201029153603989](README.assets/image-20201029153603989.png)
+>- Mack address를 지정하여 그로부터 오는 데이터를 port3으로 보내라
+
+#### OpenFlow abstraction
+
+>match+action: 여러 종류의 장치를 통일하다.
+>
+>- Router
+>
+>- - match : longest IP prefix matching -> 이전시간에 배운 것 and하여 해당하는 action을 취함
+>  - action : forward out a link
+>
+>- Switch
+>
+>- - match : 목적지 MAC주소
+>  - action : forward 혹은 flood
+>
+>- Firewall
+>
+>- - match : IP 주소 및 TCP / UDP 포트 번호
+>  - action : 허가 또는 거부
+>
+>- NAT 가능
+>
+>- - match : IP 주소 및 포트
+>  - action : 주소와 포트 재 작성 -> 해당하는 내부 망(IP address와 port)
+>
+>![image-20201029154407510](README.assets/image-20201029154407510.png)
+>
+>h5 및 h6 호스트의 데이터그램은 s1을 통해 h3 또는 h4로 전송되어야 하며, 거기서 s2로 전송되어야 한다.
+>
+>1. 소스가 10.3. 으로 시작하고 목적지가 10.2. 로 시작하는 서브넷들이 s3로 오면 패킷을 3번으로 forwarding
+>2. 소스가 10.3. 으로 시작하고 목적지가 10.2. 로 시작하면 4번으로 전송
+>3. 목적지가 10.2.0.3이면 3번으로 10.2.0.4이면 4번으로 전송
+
