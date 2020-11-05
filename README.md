@@ -2744,7 +2744,7 @@
 >
 >경로: 지정된 초기 소스 호스트에서 지정된 소스 호스트로 이동하는 라우터 패킷 시퀀스 최종 대상 호스트
 >
->good ””: least cost ””, fastest ””, least congested
+>good : least cost , fastest , least congested
 >
 >![image-20201105214346555](README.assets/image-20201105214346555.png)
 >
@@ -2754,7 +2754,7 @@
 >
 >E = set of links ={ (u,v), (u,x), (v,x), (v,w), (x,w), (x,y), (w,y), (w,z), (y,z) }
 >
->- 그래프 추상화(graph abstraction)는 P2P와 같은 다른 네트워크 환경에서 유용하며, 여기서 N은 피어세트이고 E는 TCP연결 세트
+>그래프 추상화(graph abstraction)는 P2P와 같은 다른 네트워크 환경에서 유용하며, 여기서 N은 피어세트이고 E는 TCP연결 세트
 >
 >
 >
@@ -2777,13 +2777,15 @@
 
 >Q. 글로벌 또는 분산화 정보?
 >
->- 글로벌
+>- 글로벌 (중앙 집중형 라우팅 알고리즘)
+>  - 네트워크 전체에 대한 완전한 정보를 가지고 출발지와 목적지 사이의 최소 비용 경로를 계산
 >  - 모든 라우터에는 완벽한 토플로지(topology), 링크 비용 정보가 있음
->  - 링크 상태 알고리즘
+>  - 전체 상태정보를 가지고 있는 알고리즘= **링크 상태 알고리즘(link state LS)** =다익스트라
 >- 분산된 (decentralized)
+>  - 최소 비용 경로의 계산이 라우터들에 의해 반복적이고 분산된 방식
 >  - 라우터는 물리적으로 연결된 이웃을 알고, 이웃과 비용을 연결
 >  - 반복적인 계산과정 및 이웃과의 정보 교환
->  - 거리 벡터 알고리즘
+>  - **거리 벡터 알고리즘(distance vector DV)** =벨만포드 
 >
 >Q. 정적 또는 동적?
 >
@@ -2794,8 +2796,57 @@
 >  - 빠르게 경로가 변화
 >    - 정기적인 업데이트
 >    - link cost 변경에 대한 응답
+>- 부하에 민감한 알고리즘
+>  - 링크 비용은 해당 링크의 현재 혼잡 수준을 나타내기 위해 동적으로 변한다.
+
+#### **Link-State Routing Algorithm**(LS)
+
+>- 다익스트라(Dijkstra) 알고리즘
+>  - 모든 노드에게 net topology와 link costs 정보가 알려짐
+>    - "link state broadcasting"을 통해 알려짐
+>    - 모든 노드들은 같은 정보를 갖는다
+>    - OSPF를 사용한다. : AS내의 라우터간에 정보 교환하는 라우팅 프로토콜을 의미한다.
+>  - 하나의 노드(출발지)에서 다른 노드(도착지)까지 최소 비용 경로를 연산한다.
+>    - 해당 노드들에 대해 포워딩 테이블을 제공
+>  - k번 반복 연산 후, k까지 가는 최소 비용 경로를 알게 됨
+>- notation:
+>  - C(x,y): x에서 y로의 link cost
+>    - 만약 바로 갈 수 있는 노드가 아니라면 ∞
+>  - D(v): 출발지에서 목적지까지 경로의 cost (현재까지 계산한 cost)
+>  - P(v): 출발지에서 경로로의 v까지의 경로에서 v의 이전 노드
+>  - N': 최소 비용 경로로 정의된 노드들의 집합
+
+#### **Distance vector algorithm**(DV)
+
+>- 벨만 포드 알고리즘 (dynamic programming)
+>- dx(y)dx(y): x에서 y까지의 최소 비용 경로의 cost
+>- dx(y)dx(y) = minvminv{c(x,v)+dv(y)dv(y)}
 >
+>- key idea:
+>  - 자신의 distance vector estimate를 이웃들에게 보낸다.
+>  - x가 이웃으로부터 새로운 DV를 받으면, B-F equation을 이용하여 자신의 DV를 업데이트한다.
+>  - Dx(y) ← min{c(x,v) + Dv(y)} for each node y ∊ N
+>  - 추정한 Dx(y)Dx(y)는 실제 최소 비용인 dx(y)dx(y)에 수렴한다.
 >
+>- iterative, asynchronous:
+>  - local link cost가 바뀔때 local iteration이 발생
+>  - 이웃으로부터 DV 업데이트 메시지 받으면 업데이트
+>- distributed:
+>  - 각 노드들은 자신의 DV가 변경될 때 이웃에게 알림
+>
+>- Distance vector: link cost changes
+>  - link cost가 감소한 경우 업데이트가 빠름
+>    1. t0t0: y가 link cost 변화를 탐지하고 자신의 DV를 업데이트한 후, 이웃들에게 이를 알림
+>    2. t1t1: z가 y로부터 업데이트 정보를 받고, 자신의 테이블을 업데이트. x로의 최소 비용을 업데이트 한 후, 이웃들에게 자신의 DV 보냄
+>    3. t2t2: y가 z로부터 업데이트된 정보로를 받고, 자신의 테이블을 업데이트. y의 최소 비용 테이블은 변하지 않았으므로 z에게 메시지를 보내지 않음 => 업데이트 끝!
+>  - link cost가 증가한 경우는 업데이트가 느림
+>    - z가 x로 갈 때, y를 통한 경로보다 x로 바로 가는 것이 cheap하다는 것을 깨달을 때까지 44번의 반복이 발생 -> 'count to infinity' 문제
+>    - poinson reverse를 이용해 문제 해결
+>- Distance vector: poisoned reverse
+>  - 만약 Z가 X를 얻기 위해 Y를 통해 간다면:
+>    - z에서 y 거리를 ∞ 주고 업데이트 하도록 함
+>  - 즉, 업데이트된 곳 반대를 ∞로 설정해주고 업데이트하면 빠름
+>  - poisoned reverse가 infinity problem을 대부분 해결하기는 하나, 세 개 이상의 이웃 노드를 포함한 루프인 경우 감지하지 못한다.
 
 #### intra AS routing in the Internet: OSPF
 
