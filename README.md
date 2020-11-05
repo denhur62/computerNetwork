@@ -2190,6 +2190,12 @@
 >
 >#### Router external connections
 >
+>>이더넷 케이블 -어떻게 만드는가(해당 라인 순서와 cross cable 대한 부분 숙지)
+>>
+>>![image-20201105215003009](README.assets/image-20201105215003009.png)
+>>
+>>- Console Port : configuration 접속포트
+>>
 >>![image-20201027202708451](README.assets/image-20201027202708451.png)
 >>
 >>![image-20201105144743385](README.assets/image-20201105144743385.png)
@@ -2705,3 +2711,180 @@
 >2. 소스가 10.3. 으로 시작하고 목적지가 10.2. 로 시작하면 4번으로 전송
 >3. 목적지가 10.2.0.3이면 3번으로 10.2.0.4이면 4번으로 전송
 
+### Network Layer: The Control Plane
+
+
+
+#### Network layer functions
+
+>>- 리콜 : 두개의 네트워크 계층 기능
+>>  - [data plane]포워딩(forwarding) : 라우터의 입력에서 적절한 라우터의 출력으로 패킷 이동
+>>  - [control plane]라우팅(routing) : 출발지에서 목적지까지 패킷에 의해 취해진 경로를 결정
+>>- 네트워크 제어 평면을 구조하하기위한 두 가지 접근법
+>>  - 라우터 단위 제어(전통적)
+>>  - 논리적으로 중앙화 된 제어 (소프트웨어 정의된 네트워킹)
+>
+>#### 라우터별 제어 방식
+>
+>>각 라우터와 모든 라우터의 개별 라우팅 알고리즘 구성요소가 제어면에서 상호 작용하여 포워딩 테이블을 계산함. OSPF,BGP 프로토콜이 이 라우터 별 제어 방식을 기반으로 한다. 
+>>
+>><img src="README.assets/image-20201105213537290.png" alt="image-20201105213537290" style="zoom: 80%;" />
+>
+>#### SDN
+>
+>>고유(일반적으로 원격) 컨트롤러가 라우터의 로컬 제어 에이전트(CA)와 상호 작용하여 포워딩 테이블 계산
+>>
+>>match-plus-action 를 통해 라우터는 기존에는 별도의 장치로 구현되었던 다양한 기능들(부하 분산, 방화벽 및 NAT) 뿐만 아니라 전통적인 IP포워딩을 수행 할 수 있다. 
+>>
+>>![image-20201105215257893](README.assets/image-20201105215257893.png)
+
+#### Routing protocols
+
+>좋은 "경로(주로, 라우터 네트워크를 통해 호스트 전송에서 수신 호스트로, 경로 결정)
+>
+>경로: 지정된 초기 소스 호스트에서 지정된 소스 호스트로 이동하는 라우터 패킷 시퀀스 최종 대상 호스트
+>
+>good ””: least cost ””, fastest ””, least congested
+>
+>![image-20201105214346555](README.assets/image-20201105214346555.png)
+>
+>graph: G = (N,E) 형식으로 나타내며 N은 노드 E는 엣지를 나타낸다. 
+>
+>N = set of routers = { u, v, w, x, y, z }
+>
+>E = set of links ={ (u,v), (u,x), (v,x), (v,w), (x,w), (x,y), (w,y), (w,z), (y,z) }
+>
+>- 그래프 추상화(graph abstraction)는 P2P와 같은 다른 네트워크 환경에서 유용하며, 여기서 N은 피어세트이고 E는 TCP연결 세트
+>
+>
+>
+>**그래프와 트리 차이**
+>
+>- 그래프는 cycling
+>- 트리는 acycling
+>
+>**다익스트라와 벨만포드 차이**
+>
+>- 다익스트라: 가중치는 항상 양수
+>- 벨만포드: 음의 가중치가 가능
+>
+>
+>
+>- Q. u와 z 사이의 최소 비용 경로는 무엇입니까?
+>- A. 라우팅 알고리즘(routing algorithm) : 최소 비용 경로를 찾는 알고리즘
+
+#### Routing algorithm classification
+
+>Q. 글로벌 또는 분산화 정보?
+>
+>- 글로벌
+>  - 모든 라우터에는 완벽한 토플로지(topology), 링크 비용 정보가 있음
+>  - 링크 상태 알고리즘
+>- 분산된 (decentralized)
+>  - 라우터는 물리적으로 연결된 이웃을 알고, 이웃과 비용을 연결
+>  - 반복적인 계산과정 및 이웃과의 정보 교환
+>  - 거리 벡터 알고리즘
+>
+>Q. 정적 또는 동적?
+>
+>- static:
+>  - 시간이 지남에 따라 경로가 느리게 변화
+>  - 라우터 포워딩 테이블을 직접 수정해야 함
+>- dynamic:
+>  - 빠르게 경로가 변화
+>    - 정기적인 업데이트
+>    - link cost 변경에 대한 응답
+>
+>
+
+#### intra AS routing in the Internet: OSPF
+
+>#### Making routing scalable(확장 가능한 라우팅 만들기)
+>
+>>- 모든 라우터가 동일 해야함
+>>- 네트워크 "flat" 실제로는 사실이 아님
+>>- scale : 수십억의 목적지를 가진
+>>  - 라우팅 테이블에 모든 대상을 저장할 수 없음
+>>  - 라우팅 테이블 교환은 링크가 될 것
+>>- 행정 차지(administrative autonomy)
+>>  - 인터넷 = 네트워크의 네트워크
+>>  - 각 네트워크 관리자는 자체 네트워크에서 라우팅을 제어할 수 있음
+>
+>#### 확장 가능한 라우팅에 대한 인터넷 접근 방식
+>
+>>- 라우터를 "자율 시스템(**autonomous system, AS, 도메인**)"으로 알려진 영역으로 집합
+>>- intra-AS 라우팅
+>>  - 호스트간 라우팅, 동일한 AS의 라우터
+>>  - AS의 모든 라우터는 일부 도메인 내 프로토콜을 실행해야함
+>>  - 다른 AS에 있는 라우터는 다른 도메인 내부 라우팅 프로토콜을 실행할 수 있음
+>>  - 게이트웨이 라우터 : 자체 AS의 "가장자리"에는 다른 AS의 라우터에 대한 링크가 있음
+>>- inter-AS 라우팅
+>>  - AS 사이의 라우팅
+>>  - 게이트웨이는 도메인간 라우팅(intra-도메인 라우팅도 물론)
+>
+>#### 상호연결된 ASes 
+>
+>>![image-20201105220714581](README.assets/image-20201105220714581.png)
+>>
+>>인트라 및 AS간 라우팅 알고리즘으로 구성된 전달 테이블(forwarding table)
+>>
+>>- 내부 AS 라우팅은 AS 내 목적지에 대한 항목을 결정
+>>- 외부 목적지에 대한 AS 간 및 내부 AS 결정항목
+>>- 3개의 ASes를 LG, SK, KT라 가정하고 각각의 라우터에서 forwarding table 을 업데이트 하는 방식
+>
+>#### Inter AS tasks
+>
+>>![image-20201105220933837](README.assets/image-20201105220933837.png)
+>>
+>>- AS1 라우터가 AS1 외부로 향하는 데이터그램을 받았다 가정
+>>- 라우터는 게이트웨이 라우터로 패킷을 전달해야 하지만 어느 라우터를 사용해야 하는가?
+>>- AS1 라우터가 반드시 해야하는
+>>  - AS3 를 통해 AS2 가 어느정도까지 도달할 수 있는지 익히기
+>>  - AS1의 모든 라우터에 도달 가능성 정보를 전파(도달할 수 있는 정보를 가지고 있어야 함)
+>>- AS간 라우팅 작업
+>
+>#### Intra-AS 라우팅 (기말-차이점)
+>
+>>- 내부 게이트웨이 프로토콜(interior gateway protocols, IGP)이라고 함
+>>- 가장 일반적인 intra-AS 라우팅 프로토콜
+>>  - RIP : 라우팅 정보 프로토콜 (기말-교수님 출제성향)
+>>    - RIP는 5개? RIPv2는 250개?
+>>  - OSPF : Open Shortest Path First(본질적으로 OSPF와 동일한 IS-IS 프로토콜)
+>>    - 알고리즘 이름을 프로토콜 이름으로 정함
+>>  - IGRP : Internet Gateway Routing Protocol (Cisco가 2016년까지 수십년간 독점적으로 운영)
+>
+>#### OSPF (Open Shortest Path First)
+>
+>>- "open" : 공개적으로 이용가능한
+>>- 링크 상태 알고리즘
+>>  - 링크 상태 패킷 보급
+>>  - 각 노드의 topology 맵
+>>  - 다익스트라 알고리즘을 이용한 경로 계산
+>>
+>>
+>>
+>>- link state 알고리즘 이용 -> 다익스트라 알고리즘으로 경로 연산
+>>- OSPF advertisement는 이웃 당 하나의 엔트리를 전달
+>>- advertisements는 전체 AS에게 flood
+>>  - TCP나 UDP 대신에 IP로 직접 OSPF 메시지 전달
+>>- IS-IS routing protocol: OSPF와 거의 동일
+>>- OSPF "advanced" features (not in RIP)
+>>  - security: 모든 OSPF 메시지는 인증됨(authenticated) -> 악의적인 침입을 막기 위해
+>>  - 여러개의 같은 cost 경로를 허용 (RIP는 하나의 경로만 허용)
+>>    - cost가 같은 경로 여러개이면 나눠서 보냄 => 속도↑
+>>  - 각 link에 대해 서로 다른 TOS에 대한 여러 cost 행렬 (예: best effort ToS에 대해 낮음으로 설정된 위성 링크 비용, 실시간 ToS에 대해 높음)
+>>  - 통합된 uni-cast 와 multicast 지원:
+>>    - Multicast OSPF (MOSPF)는 OSPF 기반의 동일한 토포로지 데이터를 사용한다
+>>  - 계층적인 OSPF in large domains
+>
+>**Hierarchical OSPF**
+>
+>>![image-20201105221132900](README.assets/image-20201105221132900.png)
+>>
+>>- two-level hierarchy: local area, backbone.
+>>  - link-state advertisements는 영역 안에서만 일어남
+>>  - 각 노드에는 자세한 영역 토폴로지가 있다.
+>>  - 다른 지역은 net로 가는 방향(최단 경로)만 안다
+>>- area border routers: 자신의 영역 안의 nets까지의 거리를 요약하여 다른 영역 경계 라우터에게 알린다.
+>>- backbone routers: 백본으로 제한된 OSPF 라우팅을 실행
+>>- boundary routers: 다른 AS에 연결
