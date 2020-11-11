@@ -2777,76 +2777,101 @@
 
 >Q. 글로벌 또는 분산화 정보?
 >
->- 글로벌 (중앙 집중형 라우팅 알고리즘)
->  - 네트워크 전체에 대한 완전한 정보를 가지고 출발지와 목적지 사이의 최소 비용 경로를 계산
->  - 모든 라우터에는 완벽한 토플로지(topology), 링크 비용 정보가 있음
->  - 전체 상태정보를 가지고 있는 알고리즘= **링크 상태 알고리즘(link state LS)** =다익스트라
->- 분산된 (decentralized)
->  - 최소 비용 경로의 계산이 라우터들에 의해 반복적이고 분산된 방식
->  - 라우터는 물리적으로 연결된 이웃을 알고, 이웃과 비용을 연결
->  - 반복적인 계산과정 및 이웃과의 정보 교환
->  - **거리 벡터 알고리즘(distance vector DV)** =벨만포드 
+>​	   글로벌 (중앙 집중형 라우팅 알고리즘)
+>
+> - 네트워크 전체에 대한 완전한 정보를 가지고 출발지와 목적지 사이의 최소 비용 경로를 계산
+> - 모든 라우터에는 완벽한 토플로지(topology), 링크 비용 정보가 있음
+> - 전체 상태정보를 가지고 있는 알고리즘= **링크 상태 알고리즘(link state LS)** =다익스트라
+>
+>   분산된 (decentralized)
+> - 최소 비용 경로의 계산이 라우터들에 의해 반복적이고 분산된 방식
+> - 라우터는 물리적으로 연결된 이웃을 알고, 이웃과 비용을 연결
+> - 반복적인 계산과정 및 이웃과의 정보 교환
+> - **거리 벡터 알고리즘(distance vector DV)** =벨만포드 
 >
 >Q. 정적 또는 동적?
 >
->- static:
->  - 시간이 지남에 따라 경로가 느리게 변화
->  - 라우터 포워딩 테이블을 직접 수정해야 함
->- dynamic:
->  - 빠르게 경로가 변화
->    - 정기적인 업데이트
->    - link cost 변경에 대한 응답
+>​		static:
+>
+> - 시간이 지남에 따라 경로가 느리게 변화
+> - 라우터 포워딩 테이블을 직접 수정해야 함
+>
+>   dynamic:
+> - 빠르게 경로가 변화
+>   - 정기적인 업데이트
+>   - link cost 변경에 대한 응답
 >- 부하에 민감한 알고리즘
->  - 링크 비용은 해당 링크의 현재 혼잡 수준을 나타내기 위해 동적으로 변한다.
+>
+>  링크 비용은 해당 링크의 현재 혼잡 수준을 나타내기 위해 동적으로 변한다.
 
 #### **Link-State Routing Algorithm**(LS)
 
 >- 다익스트라(Dijkstra) 알고리즘
->  - 모든 노드에게 net topology와 link costs 정보가 알려짐
->    - "link state broadcasting"을 통해 알려짐
->    - 모든 노드들은 같은 정보를 갖는다
->    - OSPF를 사용한다. : AS내의 라우터간에 정보 교환하는 라우팅 프로토콜을 의미한다.
->  - 하나의 노드(출발지)에서 다른 노드(도착지)까지 최소 비용 경로를 연산한다.
->    - 해당 노드들에 대해 포워딩 테이블을 제공
->  - k번 반복 연산 후, k까지 가는 최소 비용 경로를 알게 됨
->- notation:
->  - C(x,y): x에서 y로의 link cost
->    - 만약 바로 갈 수 있는 노드가 아니라면 ∞
->  - D(v): 출발지에서 목적지까지 경로의 cost (현재까지 계산한 cost)
->  - P(v): 출발지에서 경로로의 v까지의 경로에서 v의 이전 노드
->  - N': 최소 비용 경로로 정의된 노드들의 집합
+> - 모든 노드에게 net topology와 link costs 정보가 알려짐
+>   - "link state broadcasting"을 통해 알려짐
+>   - 모든 노드들은 같은 정보를 갖는다
+>   - OSPF를 사용한다. : AS내의 라우터간에 정보 교환하는 라우팅 프로토콜을 의미한다.
+> - 하나의 노드(출발지)에서 다른 노드(도착지)까지 최소 비용 경로를 연산한다.
+>   
+>   - 해당 노드들에 대해 포워딩 테이블을 제공
+> - k번 반복 연산 후, k까지 가는 최소 비용 경로를 알게 됨
+>
+>   notation:
+> - C(x,y): x에서 y로의 link cost
+>   
+>   - 만약 바로 갈 수 있는 노드가 아니라면 ∞
+> - D(v): 출발지에서 목적지까지 경로의 cost (현재까지 계산한 cost)
+> - P(v): 출발지에서 경로로의 v까지의 경로에서 v의 이전 노드
+> - N': 최소 비용 경로로 정의된 노드들의 집합
 
 #### **Distance vector algorithm**(DV)
 
 >- 벨만 포드 알고리즘 (dynamic programming)
+>- 유사한 것이 RIP,BGP
 >- dx(y)dx(y): x에서 y까지의 최소 비용 경로의 cost
 >- dx(y)dx(y) = minvminv{c(x,v)+dv(y)dv(y)}
 >
->- key idea:
->  - 자신의 distance vector estimate를 이웃들에게 보낸다.
->  - x가 이웃으로부터 새로운 DV를 받으면, B-F equation을 이용하여 자신의 DV를 업데이트한다.
->  - Dx(y) ← min{c(x,v) + Dv(y)} for each node y ∊ N
->  - 추정한 Dx(y)Dx(y)는 실제 최소 비용인 dx(y)dx(y)에 수렴한다.
+>  key idea:
+>
+> - 자신의 distance vector estimate를 이웃들에게 보낸다.
+> - x가 이웃으로부터 새로운 DV를 받으면, B-F equation을 이용하여 자신의 DV를 업데이트한다.
+> - Dx(y) ← min{c(x,v) + Dv(y)} for each node y ∊ N
+> - 추정한 Dx(y)Dx(y)는 실제 최소 비용인 dx(y)dx(y)에 수렴한다.
 >
 >- iterative, asynchronous:
->  - local link cost가 바뀔때 local iteration이 발생
->  - 이웃으로부터 DV 업데이트 메시지 받으면 업데이트
->- distributed:
->  - 각 노드들은 자신의 DV가 변경될 때 이웃에게 알림
+> - local link cost가 바뀔때 local iteration이 발생
+> - 이웃으로부터 DV 업데이트 메시지 받으면 업데이트
+>
+>   Distributed:
+> - 각 노드들은 자신의 DV가 변경될 때 이웃에게 알림
 >
 >- Distance vector: link cost changes
->  - link cost가 감소한 경우 업데이트가 빠름
->    1. t0t0: y가 link cost 변화를 탐지하고 자신의 DV를 업데이트한 후, 이웃들에게 이를 알림
->    2. t1t1: z가 y로부터 업데이트 정보를 받고, 자신의 테이블을 업데이트. x로의 최소 비용을 업데이트 한 후, 이웃들에게 자신의 DV 보냄
->    3. t2t2: y가 z로부터 업데이트된 정보로를 받고, 자신의 테이블을 업데이트. y의 최소 비용 테이블은 변하지 않았으므로 z에게 메시지를 보내지 않음 => 업데이트 끝!
->  - link cost가 증가한 경우는 업데이트가 느림
->    - z가 x로 갈 때, y를 통한 경로보다 x로 바로 가는 것이 cheap하다는 것을 깨달을 때까지 44번의 반복이 발생 -> 'count to infinity' 문제
->    - poinson reverse를 이용해 문제 해결
+> - link cost가 감소한 경우 업데이트가 빠름
+>   1. t0t0: y가 link cost 변화를 탐지하고 자신의 DV를 업데이트한 후, 이웃들에게 이를 알림
+>   2. t1t1: z가 y로부터 업데이트 정보를 받고, 자신의 테이블을 업데이트. x로의 최소 비용을 업데이트 한 후, 이웃들에게 자신의 DV 보냄
+>   3. t2t2: y가 z로부터 업데이트된 정보로를 받고, 자신의 테이블을 업데이트. y의 최소 비용 테이블은 변하지 않았으므로 z에게 메시지를 보내지 않음 => 업데이트 끝!
+> - link cost가 증가한 경우는 업데이트가 느림
+>   - z가 x로 갈 때, y를 통한 경로보다 x로 바로 가는 것이 cheap하다는 것을 깨달을 때까지 44번의 반복이 발생 -> 'count to infinity' 문제
+>   - poinson reverse를 이용해 문제 해결
 >- Distance vector: poisoned reverse
->  - 만약 Z가 X를 얻기 위해 Y를 통해 간다면:
->    - z에서 y 거리를 ∞ 주고 업데이트 하도록 함
->  - 즉, 업데이트된 곳 반대를 ∞로 설정해주고 업데이트하면 빠름
->  - poisoned reverse가 infinity problem을 대부분 해결하기는 하나, 세 개 이상의 이웃 노드를 포함한 루프인 경우 감지하지 못한다.
+> - 만약 Z가 X를 얻기 위해 Y를 통해 간다면:
+>   
+>   - z에서 y 거리를 ∞ 주고 업데이트 하도록 함
+> - 즉, 업데이트된 곳 반대를 ∞로 설정해주고 업데이트하면 빠름
+> - poisoned reverse가 infinity problem을 대부분 해결하기는 하나, 세 개 이상의 이웃 노드를 포함한 루프인 경우 감지하지 못한다.
+
+**LS와 DV 알고리즘 비교**
+
+>​		message complexity
+>
+> - LS: 노드가 n개, 링크가 E개일 때 O(nE)
+> - DV: 이웃끼리만 메시지 교환
+>
+>   수렴 속도
+> - LS: O(n2n2) 
+> - DV: 수렴 속도 다양
+>   - 라우팅 루프 발생 가능
+>   - count to infinity problem 발생 가능
 
 #### intra AS routing in the Internet: OSPF
 
@@ -2854,22 +2879,26 @@
 >
 >>- 모든 라우터가 동일 해야함
 >>- 네트워크 "flat" 실제로는 사실이 아님
->>- scale : 수십억의 목적지를 가진
->>  - 라우팅 테이블에 모든 대상을 저장할 수 없음
->>  - 라우팅 테이블 교환은 링크가 될 것
->>- 행정 차지(administrative autonomy)
->>  - 인터넷 = 네트워크의 네트워크
->>  - 각 네트워크 관리자는 자체 네트워크에서 라우팅을 제어할 수 있음
+>>
+>>  **scale** : 수십억의 목적지를 가지려면
+>>
+>> - 라우팅 테이블에 모든 대상을 저장할 수 없음
+>> - 라우팅 테이블 교환은 링크가 될 것
+>>
+>>   행정 차지(**administrative autonomy**)
+>> - 인터넷 = 네트워크의 네트워크
+>> - 각 네트워크 관리자는 자체 네트워크에서 라우팅을 제어할 수 있음
 >
 >#### 확장 가능한 라우팅에 대한 인터넷 접근 방식
 >
->>- 라우터를 "자율 시스템(**autonomous system, AS, 도메인**)"으로 알려진 영역으로 집합
->>- intra-AS 라우팅
+>>- 라우터가 수억개 + 외부 네트워크에 연결하면서도 자신이 원하는 대로 네트워크 운영하고 관리=**AS**
+>>-  라우터를 &quot;자율 시스템(**autonomous system, AS, 도메인**)&quot;으로 알려진 영역으로 집합
+>>
+>>   intra-AS 라우팅
 >>  - 호스트간 라우팅, 동일한 AS의 라우터
->>  - AS의 모든 라우터는 일부 도메인 내 프로토콜을 실행해야함
+>>  - AS의 모든 라우터는 일부 도메인 내 프로토콜을 실행해야한다.
 >>  - 다른 AS에 있는 라우터는 다른 도메인 내부 라우팅 프로토콜을 실행할 수 있음
->>  - 게이트웨이 라우터 : 자체 AS의 "가장자리"에는 다른 AS의 라우터에 대한 링크가 있음
->>- inter-AS 라우팅
+>> - 게이트웨이 라우터 : 자체 AS의 "가장자리"에는 다른 AS의 라우터에 대한 링크가 있음
 >>  - AS 사이의 라우팅
 >>  - 게이트웨이는 도메인간 라우팅(intra-도메인 라우팅도 물론)
 >
@@ -2877,65 +2906,103 @@
 >
 >>![image-20201105220714581](README.assets/image-20201105220714581.png)
 >>
->>인트라 및 AS간 라우팅 알고리즘으로 구성된 전달 테이블(forwarding table)
+>>* 인트라 및 AS간 라우팅 알고리즘으로 구성된 전달 테이블(forwarding table)
 >>
->>- 내부 AS 라우팅은 AS 내 목적지에 대한 항목을 결정
->>- 외부 목적지에 대한 AS 간 및 내부 AS 결정항목
->>- 3개의 ASes를 LG, SK, KT라 가정하고 각각의 라우터에서 forwarding table 을 업데이트 하는 방식
+>>  내부 AS 라우팅은 AS 내 목적지에 대한 항목을 결정
+>>
+>>  외부 목적지에 대한 AS 간 및 내부 AS 결정항목
+>>
+>>​	 3개의 ASes를 LG, SK, KT라 가정하고 각각의 라우터에서 forwarding table 을 업데이트 하는 방식
 >
 >#### Inter AS tasks
 >
 >>![image-20201105220933837](README.assets/image-20201105220933837.png)
 >>
->>- AS1 라우터가 AS1 외부로 향하는 데이터그램을 받았다 가정
->>- 라우터는 게이트웨이 라우터로 패킷을 전달해야 하지만 어느 라우터를 사용해야 하는가?
->>- AS1 라우터가 반드시 해야하는
->>  - AS3 를 통해 AS2 가 어느정도까지 도달할 수 있는지 익히기
->>  - AS1의 모든 라우터에 도달 가능성 정보를 전파(도달할 수 있는 정보를 가지고 있어야 함)
->>- AS간 라우팅 작업
+>>* AS1 라우터가 AS1 외부로 향하는 데이터그램을 받았다 가정
+>>
+>>  라우터는 게이트웨이 라우터로 패킷을 전달해야 하지만 어느 라우터를 사용해야 하는가?
+>>
+>>* AS1 라우터가 반드시 해야한다.
+>>
+>>  AS3 를 통해 AS2 가 어느정도까지 도달할 수 있는지 익히기
+>>
+>>  AS1의 모든 라우터에 도달 가능성 정보를 전파(도달할 수 있는 정보를 가지고 있어야 함)
+>>
+>>  AS간 라우팅 작업
 >
->#### Intra-AS 라우팅 (기말-차이점)
+>#### Intra-AS Routing(라우팅)(기말-차이점) 
 >
->>- 내부 게이트웨이 프로토콜(interior gateway protocols, IGP)이라고 함
->>- 가장 일반적인 intra-AS 라우팅 프로토콜
->>  - RIP : 라우팅 정보 프로토콜 (기말-교수님 출제성향)
->>    - RIP는 5개? RIPv2는 250개?
->>  - OSPF : Open Shortest Path First(본질적으로 OSPF와 동일한 IS-IS 프로토콜)
->>    - 알고리즘 이름을 프로토콜 이름으로 정함
->>  - IGRP : Internet Gateway Routing Protocol (Cisco가 2016년까지 수십년간 독점적으로 운영)
+>>- 내부 게이트웨이 프로토콜(**interior gateway protocols, IGP**)이라고 함
+>>
+>>- 즉 같은 자치 시스템(AS) 내부에 호스트와 라우터들 간의 라우팅 방식, 같은 영역 내에 라우터들은 같은 인트라 도메인 프로토콜(**intra domain protocol**) 을 수행한다.
+>>
+>>  가장 일반적인 intra-AS 라우팅 프로토콜
+>>
+>> - RIP : Routing Information Protocol 라우팅 정보 프로토콜 (기말-교수님 출제성향)
+>>   
+>>   - RIP는 5개? RIPv2는 250개?
+>>   
+>> - OSPF : Open Shortest Path First(본질적으로 OSPF와 동일한 IS-IS 프로토콜)
+>>   
+>>   - 알고리즘 이름을 프로토콜 이름으로 정함
+>>   
+>> - IGRP : Internet Gateway Routing Protocol (Cisco가 2016년까지 수십년간 독점적으로 운영)
+>
+>#### Inter-AS routring
+>
+>>* 서로 다른 자치 시스템(AS)간의 라우팅 방식이다.
+>>* 게이트웨이 라우터가 인트라 도메인 라우팅 뿐만 아니라 인터 도메인 라우팅(inter domain routing)도 수행한다.
+>>* BGP : BOrder Gateway Protocol
 >
 >#### OSPF (Open Shortest Path First)
 >
->>- "open" : 공개적으로 이용가능한
->>- 링크 상태 알고리즘
->>  - 링크 상태 패킷 보급
->>  - 각 노드의 topology 맵
->>  - 다익스트라 알고리즘을 이용한 경로 계산
+>>- "open" : 공개적으로 이용가능하다.
+>>
+>>- 링크 상태 알고리즘을 사용한다.
+>>
+>>  링크 상태 패킷 보급
+>>
+>>  각 노드의 topology 맵
+>>
+>>  link state 알고리즘 이용 -> 다익스트라 알고리즘으로 경로 연산
 >>
 >>
 >>
->>- link state 알고리즘 이용 -> 다익스트라 알고리즘으로 경로 연산
->>- OSPF advertisement는 이웃 당 하나의 엔트리를 전달
->>- advertisements는 전체 AS에게 flood
->>  - TCP나 UDP 대신에 IP로 직접 OSPF 메시지 전달
->>- IS-IS routing protocol: OSPF와 거의 동일
->>- OSPF "advanced" features (not in RIP)
->>  - security: 모든 OSPF 메시지는 인증됨(authenticated) -> 악의적인 침입을 막기 위해
->>  - 여러개의 같은 cost 경로를 허용 (RIP는 하나의 경로만 허용)
->>    - cost가 같은 경로 여러개이면 나눠서 보냄 => 속도↑
->>  - 각 link에 대해 서로 다른 TOS에 대한 여러 cost 행렬 (예: best effort ToS에 대해 낮음으로 설정된 위성 링크 비용, 실시간 ToS에 대해 높음)
->>  - 통합된 uni-cast 와 multicast 지원:
->>    - Multicast OSPF (MOSPF)는 OSPF 기반의 동일한 토포로지 데이터를 사용한다
->>  - 계층적인 OSPF in large domains
+>>- OSPF advertisement는 이웃 당 하나의 엔트리를 전달하며 advertisements는 전체 AS에게 flood
+>>
+>>  TCP나 UDP 대신에 IP로 직접 OSPF 메시지 전달
+>>
+>>- *IS-IS routing protocol**: OSPF와 거의 동일
+>>
+>>#### OSPF "advanced" features (not in RIP)
+>>
+>>> - **security**: 모든 OSPF 메시지는 인증됨(authenticated) -> 악의적인 침입을 막기 위해
+>>>
+>>> - **여러개의 같은 cost 경로를 허용** (RIP는 하나의 경로만 허용)
+>>>
+>>>   - cost가 같은 경로 여러개이면 나눠서 보냄 => 속도↑
+>>>
+>>> - 각 link에 대해 서로 다른 **TOS**에 대한 여러 cost 행렬 (예: best effort ToS에 대해 낮음으로 설정된 위성 링크 비용, 실시간 ToS에 대해 높음)\
+>>>
+>>>   tos=(Type of Serivce)  로 서비스 유형, 혼잡 알림을 나타낸다.
+>>>
+>>>   통합된 uni-cast 와 **multicast** 지원:
+>>>
+>>>   * Multicast OSPF (MOSPF)는 OSPF 기반의 동일한 토포로지 데이터를 사용한다
+>>>
+>>> - **계층적인** OSPF in large domains
 >
 >**Hierarchical OSPF**
 >
 >>![image-20201105221132900](README.assets/image-20201105221132900.png)
 >>
->>- two-level hierarchy: local area, backbone.
->>  - link-state advertisements는 영역 안에서만 일어남
->>  - 각 노드에는 자세한 영역 토폴로지가 있다.
->>  - 다른 지역은 net로 가는 방향(최단 경로)만 안다
->>- area border routers: 자신의 영역 안의 nets까지의 거리를 요약하여 다른 영역 경계 라우터에게 알린다.
->>- backbone routers: 백본으로 제한된 OSPF 라우팅을 실행
->>- boundary routers: 다른 AS에 연결
+>>- **two-level hierarchy**: local area, backbone.
+>>
+>>  link-state advertisements는 영역 안에서만 일어남
+>>
+>>  각 노드에는 자세한 영역 토폴로지가 있다.
+>>
+>>  다른 지역은 net로 가는 방향(최단 경로)만 안다
+>>- **area border routers**: 자신의 영역 안의 nets까지의 거리를 요약하여 다른 영역 경계 라우터에게 알린다.
+>>- **backbone routers**: 백본으로 제한된 OSPF 라우팅을 실행 즉 AS내 영역 간의 트래픽을 라우팅 함.
+>>- **boundary routers**: 다른 AS에 연결
