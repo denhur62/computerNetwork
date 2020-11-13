@@ -2000,7 +2000,7 @@
 >이는 순서화 패킷 전달 서비스, 지연 제한 이내 보장된 전달 , 최소 대역폭등 넷플릭스 스카이프 등에서 주로 사용한다.
 >
 
-**2개의 주요 network layer functions**
+#### 2개의 주요 network layer functions
 
 >#### 	 forwarding: (데이터 평면)
 >
@@ -2807,27 +2807,34 @@
 #### **Link-State Routing Algorithm**(LS)
 
 >- 다익스트라(Dijkstra) 알고리즘
-> - 모든 노드에게 net topology와 link costs 정보가 알려짐
->   - "link state broadcasting"을 통해 알려짐
->   - 모든 노드들은 같은 정보를 갖는다
->   - OSPF를 사용한다. : AS내의 라우터간에 정보 교환하는 라우팅 프로토콜을 의미한다.
-> - 하나의 노드(출발지)에서 다른 노드(도착지)까지 최소 비용 경로를 연산한다.
->   
->   - 해당 노드들에 대해 포워딩 테이블을 제공
-> - k번 반복 연산 후, k까지 가는 최소 비용 경로를 알게 됨
 >
->   notation:
-> - C(x,y): x에서 y로의 link cost
->   
->   - 만약 바로 갈 수 있는 노드가 아니라면 ∞
-> - D(v): 출발지에서 목적지까지 경로의 cost (현재까지 계산한 cost)
-> - P(v): 출발지에서 경로로의 v까지의 경로에서 v의 이전 노드
-> - N': 최소 비용 경로로 정의된 노드들의 집합
+>- 모든 노드에게 net topology와 link costs 정보가 알려짐
+>  - "link state broadcasting"을 통해 알려짐
+>  - 모든 노드들은 같은 정보를 갖는다
+>  - OSPF를 사용한다. : AS내의 라우터간에 정보 교환하는 라우팅 프로토콜을 의미한다.
+>  
+>- 하나의 노드(출발지)에서 다른 노드(도착지)까지 최소 비용 경로를 연산한다.
+>  
+>  - 해당 노드들에 대해 포워딩 테이블을 제공
+>  
+>- k번 반복 연산 후, k까지 가는 최소 비용 경로를 알게 됨
+>
+>  notation:
+>  
+>- C(x,y): x에서 y로의 link cost
+>  
+>  - 만약 바로 갈 수 있는 노드가 아니라면 ∞
+>  
+>- D(v): 출발지에서 목적지까지 경로의 cost (현재까지 계산한 cost)
+>
+>- P(v): 출발지에서 경로로의 v까지의 경로에서 v의 이전 노드
+>
+>- N': 최소 비용 경로로 정의된 노드들의 집합
 
 #### **Distance vector algorithm**(DV)
 
 >- 벨만 포드 알고리즘 (dynamic programming)
->- 유사한 것이 RIP,BGP
+>- 유사한 것이 RIP,BGP(정확히는 Path vector)
 >- dx(y)dx(y): x에서 y까지의 최소 비용 경로의 cost
 >- dx(y)dx(y) = minvminv{c(x,v)+dv(y)dv(y)}
 >
@@ -2862,16 +2869,30 @@
 
 **LS와 DV 알고리즘 비교**
 
+>![image-20201113164833543](README.assets/image-20201113164833543.png)
+>
+>​	Link state Routing Protocol로 최적의 경로를 찾게 된다면 모든 경로의 정보를 수신한 다음 해당 정보를 토대로 최단거리를 도출하기 때문에 라우터간에 교환을 해야하는 단점이 있지만 Best Route를 찾을 수 있다.
+>
 >​		message complexity
 >
-> - LS: 노드가 n개, 링크가 E개일 때 O(nE)
-> - DV: 이웃끼리만 메시지 교환
+>- LS: 노드가 n개, 링크가 E개일 때 O(nE)
+>- DV: 이웃끼리만 메시지 교환
 >
->   수렴 속도
-> - LS: O(n2n2) 
-> - DV: 수렴 속도 다양
->   - 라우팅 루프 발생 가능
->   - count to infinity problem 발생 가능
+>  수렴 속도
+>- LS: O(n2n2) 
+>- DV: 수렴 속도 다양
+>  - 라우팅 루프 발생 가능
+>  - count to infinity problem 발생 가능
+
+#### 라우팅 방식 및 각 라우팅 프로토콜 설명
+
+>![image-20201113170748012](README.assets/image-20201113170748012.png)
+>
+>![image-20201113170803323](README.assets/image-20201113170803323.png)
+>
+>![image-20201113170811344](README.assets/image-20201113170811344.png)
+>
+>
 
 #### intra AS routing in the Internet: OSPF
 
@@ -2982,7 +3003,7 @@
 >>>
 >>>   - cost가 같은 경로 여러개이면 나눠서 보냄 => 속도↑
 >>>
->>> - 각 link에 대해 서로 다른 **TOS**에 대한 여러 cost 행렬 (예: best effort ToS에 대해 낮음으로 설정된 위성 링크 비용, 실시간 ToS에 대해 높음)\
+>>> - 각 link에 대해 서로 다른 **TOS**에 대한 여러 cost 행렬 (예: best effort ToS에 대해 낮음으로 설정된 위성 링크 비용, 실시간 ToS에 대해 높음)
 >>>
 >>>   tos=(Type of Serivce)  로 서비스 유형, 혼잡 알림을 나타낸다.
 >>>
@@ -3066,5 +3087,93 @@
 >>  - **UPDATE** : 새 경로를 알림 (또는 오래된 것을 철회)
 >>  - **KEEP** **ALIVE** : UPDATE가 없을 때 연결을 유지 (또는 ACKs OPEN 요청)
 >>  - **NOTIFICATION** : 이전 메세지의 오류를 보고 (또는 연결을 닫는데 사용)
+>
+>#### BGP, OSPF, forwarding table entries
+>
+>>![image-20201113155301238](README.assets/image-20201113155301238.png)
 >>
+>>라우터는 전달 테이블 항목을 접두어(prefix)로 어떻게 설정합니까?
 >>
+>>- recall : 1a, 1b, 1c iBGP를 통해 dest X에 대해 알아보기
+>>- 1c : "X 경로가 1c를 통과 함"
+>>- 1d : OSPF 내부 도메인(intra-domain) 라우팅 : 1c로 이동, 발신 로컬 인터페이스 1로 전달
+>>- 1a : OSPF 내부 도메인 라우팅 : 1c에 도달하고 발신 로컬 인터페이스 2로 전달
+>
+>#### BGP route selection
+>
+>>라우터는 목적지 AS에 대한 하나 이상의 라우트에 대해 학습하고 다음에 기초하여 라우트를 선택
+>>
+>>1. 지역 특징 가치 속성(local preference value attribute) : 정책 결정
+>>2. 최단 AS-PATH
+>>3. 가장 가까운 NEXT-HOP 라우터 : hot potato(뜨거운 감자, 최대한 빨리 판단할 수 있는) 라우팅
+>>4. 추가 기준
+>
+>#### BGP: achieving policy via advertisements
+>
+>>![image-20201113155623058](README.assets/image-20201113155623058.png)
+>>
+>>- ISP가 고객 네트워크에서만 트래픽을 라우팅 하기만을 원한다고 가정 (다른 ISP간의 트래픽 이동을 원치 않음)
+>>- A는 경로 Aw를 B와 C에 알림
+>>- B가 BAw를 C에 광고하지 않기로 결정한 경우
+>>  - C, A, w중 어느것도 B의 고객이 아니기 때문에 B는 라우팅 CBAw에 대해 "수익"을 얻지 못함
+>>  - C는 CBAw 경로에 대해 알지 못함
+>>- C는 CAw를 사용하지 않도록 CAw(B를 사용하지 않음)를 라우팅함
+>>- A, B, C는 **공급자 네트워크**
+>>- X, W, Y는 고객 (공급자 네트워크의)
+>>- X는 **이중 홈(dual-home)** : 2개의 네트워크에 연결됨
+>>- 시행 할 정책 : X는 X를 통해 B에서 C로 라우팅하고 싶지 않음
+>>  - 그래서 X는 B에게 C경로를 광고하지 않을 것
+>
+>#### Why different Intra,Inter AS routing ?
+>
+>>- 정책이슈
+>>  - 특정 AS에서 시작된 트래픽이 다른 특정AS를 통과할 수 없다는 것은 중요할 수 있음
+>>  - 특정 AS가 다른 AS들 사이에서 어떤 트래픽을 전달할 지 제어하기를 원하는 것 역시 당연한 것
+>>  - 정책기반 라우팅 결정이 가능하도록 하기위해 BGP가 경로속성을 전달하고 라우팅 정보를 배포하는 제어된 방식을 제공함을 보았음
+>>  - inter-AS : 관리자는 트래픽이 라우팅되는 방식, 네트워크를 통해 라우팅되는 방식을 제어하려고 함
+>>  - intra-AS : 단일 관리자, 정책 결정 필요 없음(동일한 행정통제하에 있으므로)
+>>- 규모
+>>  - 한 AS내에서는 확장성이 중요하지 않음
+>>  - 하나의 ISP가 너무 커지면 이를 두개의 AS로 분리하고, 이 새로운 두 AS간 라우팅을 수행할 수 있음 (OSPF가 하나의 AS를 여러 영역으로 나눔으로써 계층을 만드는 것을 허용함을 기억할 것)
+>>  - 계층적 라우팅으로 테이블 크기를 줄이고 업데이트 트래픽을 줄임
+>>- 성능
+>>  - intra-AS : 성능에 집중할 수 있음
+>>  - inter-AS : 정책이 성능보다 우세함 (policy > performance)
+
+#### Software defined networking (SDN)
+
+>- 인터넷 네트워크 계층 : 역사적으로 분산형, 라우터 단위방식으로 구현
+>  - monolithic 라우터에는 전용 라우터 OS(IP, RIP, IS-IS, OSPF, BGP)의 독점적인 구현이 포함되어 있다(예 : Cisco OS)
+>    - monolithic : 일체로 되어있는, 이음매가 없는, IC등 직접회로의 반도체 기판이 한 장일 때
+>  - 다양한 네트워크 계층 기능을 위한 다양한 "미들박스" : 방화벽, 로드 밸런서, NAT 박스
+>    - flexible 하게 네트워크 계층 기능들을 SDN으로 구현할 수 있음
+>- 2005년 : 네트워크 제어 재설정에 대한 새로워진 관심
+>
+>- 왜 논리적으로 중앙 집중식 제어 계획입니까?
+>  - 쉬운 네트워크 관리 : 라우터의 잘못된 설정을 방지하고, 트래픽 흐름의 유연성 향상
+>  - 분산형 프로그래밍 : 더 어려움 : 각 라우터에 구현된 분산 알고리즘(프로토콜)의 결과로 테이블 계산
+>- Control Plane의 공개 (비 독점) 구현
+>- Management 하기 쉽고 (단, 각각의 라우터마다 configuration을 진행해야 하는 단점)
+>
+>#### Traffic engineering: difficult traditional routing
+>
+>>![image-20201113160724436](README.assets/image-20201113160724436.png)
+>>
+>>- Q : 네트워크 운영자가 u-to-z 트래픽이 uvwz, x-to-z 트래픽이 xwyz를 통과하도록하려면 어떻게해야합니까?
+>>- A : 트래픽 라우팅 알고리즘이 경로를 적절히 계산할 수 있도록 링크 가중치를 정의해야합니다 (또는 새 라우팅 알고리즘 필요)!
+>>- 링크 중량은 "knobs" 를 제어할 수 있습니다.
+>>- Q. 네트워크 운영자가 uvwz 및 uxyz (로드 밸런싱)를 따라 u-to-z 트래픽을 분할하려는 경우 어떻게해야합니까?
+>>- A. 할 수 없습니다(또는 새로운 라우팅 알고리즘이 필요함)
+>>- Q : w가 파란색과 빨간색 트래픽을 달리 다르게하려면 어떻게해야합니까?
+>>- A : 할 수 없습니다 (목적지 기반 포워딩 및 LS, DV 라우팅 사용)
+>
+>#### Software defined networking
+>
+>>![image-20201113160823758](README.assets/image-20201113160823758.png)
+>>
+>>일반화 된 "플로우 기반"포워딩 (예 : OpenFlow) 2. 제어, 데이터 평면(data plane) 분리 3. 제어 평면(control plane)기능 - 데이터 전송 스위치의 외부기능 4. 프로그램 가능한 제어 어플리케이션
+>>
+>>- 중앙 집중화된 Remote Controller
+>>- Control plane 과 Data Plane 으로 나뉘는 부분
+>>- software 적으로 flexible 하게 프로그래밍해서 한꺼번에 처리하게 할 수 있음 (장점)
+
