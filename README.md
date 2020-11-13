@@ -3006,3 +3006,65 @@
 >>- **area border routers**: 자신의 영역 안의 nets까지의 거리를 요약하여 다른 영역 경계 라우터에게 알린다.
 >>- **backbone routers**: 백본으로 제한된 OSPF 라우팅을 실행 즉 AS내 영역 간의 트래픽을 라우팅 함.
 >>- **boundary routers**: 다른 AS에 연결
+
+### Internet inter AS routing: BGP
+
+>#### BGP (Border Gateway Protocol):
+>
+>>- Border Gateway Protocol, BGP : 사실상의 도메인간 라우팅 프로토콜
+>>  - 인터넷을 연결하는 접착제
+>>- BGP는 각 AS를 다음과 같은 방법으로 제공
+>>  - **eBGP** : 인접한 AS로부터 서브넷 반응성 정보를 얻음
+>>  - **iBGP** : 모든 AS내부 라우터에 도달 가능성(reachability) 정보를 전파
+>>  - 도달 가능성 정보 및 정책을 기반으로 다른 네트워크에 대한 "좋은(good)" 라우터(경로)를 결정
+>>- 서브넷이 인터넷의 나머지 부분에 자신의 존재를 알리는 것을 허용 (나 여기있다)
+>>
+>>![image-20201113152459932](README.assets/image-20201113152459932.png)
+>
+>#### BGP basics
+>
+>>![image-20201113152525777](README.assets/image-20201113152525777.png)
+>>
+>>- **BGP 세션** : 두개의 BGP 라우터(피어)가 반영구적인 TCP연결을 통해 BGP 메세지를 교환
+>>  - 다른 목적지 네트워크 프리픽스 대한 광고 경로 (BGP는 경로벡터 프로토콜임)
+>>- AS3 게이트웨이 라우터 3a가 경로 AS3, X를 AS2 게이트웨이 라우터 2c에 알릴 때
+>>  - AS3는 AS2에게 데이터그램을 X로 전달할 것을 약속
+>
+>#### Path attributes and BGP routes
+>
+>>- 광고된 접두사(advertised prefix)에는 BGP속성이 포함
+>>  - prefix + attributes = route
+>>- 두개의 중요한 속성
+>>  - **AS-PATH** : 접두사 광고가 통과된 ASES 목록
+>>  - **NEXT-HOP** : 다음과 같은 특정 내부-AS라우터를 다음 홉AS로 나타냄
+>>- **Policy based routing:(정책 기반 라우팅)**
+>>  - 게이트웨이 수신경로 광고는 가져오기 정책(import policy)을 사용하여 accept/decline를 초과하는 경로를 사용 (예: AS Y를 통과하지 않음)
+>>  - AS 정책은 또한 다른 인접한 AS에 대한 경로를 광고할지 여부를 결정
+>>  - 예를들어 서울에서 부산으로 최고성능을 기반(직진)으로 가고싶다고 하자, 그러나 정책(policy)가 허용되지 않으면 무조건 직진할 수가 없음. 즉, Policy > 성능
+>
+>#### BGP path advertisement
+>
+>>![image-20201113153917286](README.assets/image-20201113153917286.png)
+>>
+>>- AS2 라우터 2c는 AS3 라우터 3a에서 경로 알림 AS3, X (eBGP를 통해)를 받는다.
+>>- AS2 정책에 따라 AS2 라우터 2c는 경로 AS3을 수용합니다. X는 iBGP를 통해 모든 AS2 라우터로 전파된다
+>>- AS2 정책에 따라 AS2 라우터 2a는 AS2, AS3, X 경로를 ASB 라우터 1c에 알린다 (eBGP를 통해)
+>>
+>>![image-20201113153942716](README.assets/image-20201113153942716.png)
+>>
+>>게이트웨이 라우터는 대상 경로에 대한 다중 경로를 학습할 수 있음
+>>
+>>- AS1 게이트웨이 라우터 1c는 경로 AS2, AS3, X를 2a에서 확인
+>>- AS1 게이트웨이 라우터 1c는 경로 AS3, X를 3a에서 습득
+>>- 정책에 따라 AS1 게이트웨이 라우터 1c는 경로 AS3, X를 선택하고 AS1 내의 경로를 iBGP를 통해 알림
+>
+>#### BGP Message
+>
+>>- TCP연결을 통해 피어간에 교환되는 BGP 메세지
+>>- BGP 메세지
+>>  - **OPEN** : 원격 BGP 피어와 TCP 연결을 열고 BGP 피어의 송신을 인증
+>>  - **UPDATE** : 새 경로를 알림 (또는 오래된 것을 철회)
+>>  - **KEEP** **ALIVE** : UPDATE가 없을 때 연결을 유지 (또는 ACKs OPEN 요청)
+>>  - **NOTIFICATION** : 이전 메세지의 오류를 보고 (또는 연결을 닫는데 사용)
+>>
+>>
