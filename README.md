@@ -2888,7 +2888,7 @@
 
 >![image-20201113164833543](README.assets/image-20201113164833543.png)
 >
->​	Link state Routing Protocol로 최적의 경로를 찾게 된다면 모든 경로의 정보를 수신한 다음 해당 정보를 토대로 최단거리를 도출하기 때문에 라우터간에 교환을 해야하는 단점이 있지만 Best Route를 찾을 수 있다.
+>Link state Routing Protocol로 최적의 경로를 찾게 된다면 모든 경로의 정보를 수신한 다음 해당 정보를 토대로 최단거리를 도출하기 때문에 라우터간에 교환을 해야하는 단점이 있지만 Best Route를 찾을 수 있다.
 >
 >​		message complexity
 >
@@ -2946,11 +2946,11 @@
 >>
 >>* 인트라 및 AS간 라우팅 알고리즘으로 구성된 전달 테이블(forwarding table)
 >>
->>  내부 AS 라우팅은 AS 내 목적지에 대한 항목을 결정
+>> 내부 AS 라우팅은 AS 내 목적지에 대한 항목을 결정
 >>
->>  외부 목적지에 대한 AS 간 및 내부 AS 결정항목
+>> 외부 목적지에 대한 AS 간 및 내부 AS 결정항목
 >>
->>​	 3개의 ASes를 LG, SK, KT라 가정하고 각각의 라우터에서 forwarding table 을 업데이트 하는 방식
+>>3개의 ASes를 LG, SK, KT라 가정하고 각각의 라우터에서 forwarding table 을 업데이트 하는 방식
 >
 >#### Inter AS tasks
 >
@@ -2990,7 +2990,7 @@
 >
 >>* 서로 다른 자치 시스템(AS)간의 라우팅 방식이다.
 >>* 게이트웨이 라우터가 인트라 도메인 라우팅 뿐만 아니라 인터 도메인 라우팅(inter domain routing)도 수행한다.
->>* BGP : BOrder Gateway Protocol
+>>* BGP : Border Gateway Protocol
 >
 >#### OSPF (Open Shortest Path First)
 >
@@ -3004,13 +3004,11 @@
 >>
 >>  link state 알고리즘 이용 -> 다익스트라 알고리즘으로 경로 연산
 >>
->>
->>
 >>- OSPF advertisement는 이웃 당 하나의 엔트리를 전달하며 advertisements는 전체 AS에게 flood
 >>
->>  TCP나 UDP 대신에 IP로 직접 OSPF 메시지 전달
+>> TCP나 UDP 대신에 IP로 직접 OSPF 메시지 전달
 >>
->>- *IS-IS routing protocol**: OSPF와 거의 동일
+>> - **IS-IS routing protocol**: OSPF와 거의 동일
 >>
 >>#### OSPF "advanced" features (not in RIP)
 >>
@@ -3078,9 +3076,9 @@
 >>
 >>- 두개의 중요한 속성
 >>
->> - **AS-PATH** : 알림 메세지가 통과하는 AS들의 리스트\
+>> - **AS-PATH** : 알림 메세지가 통과하는 AS들의 리스트
 >>
->>   밑의 그림에서 AS1에서 서브넷 x까지 두 개의 경로가 존재한다. 
+>>   책 365에서 AS1에서 서브넷 x까지 두 개의 경로가 존재한다. 
 >>
 >>   AS-PATH: AS2 AS3, AS3가 그 예이다.  
 >>
@@ -3202,10 +3200,10 @@
 >- 인터넷 네트워크 계층 : 역사적으로 분산형, 라우터 단위방식으로 구현
 >- monolithic 라우터에는 전용 라우터 OS(IP, RIP, IS-IS, OSPF, BGP)의 독점적인 구현이 포함되어 있다(예 : Cisco OS)
 >
-> - monolithic : 일체로 되어있는, 이음매가 없는, IC등 직접회로의 반도체 기판이 한 장일 때
+>- monolithic : 일체로 되어있는, 이음매가 없는, IC등 직접회로의 반도체 기판이 한 장일 때
 >- 다양한 네트워크 계층 기능을 위한 다양한 "미들박스" : 방화벽, 로드 밸런서, NAT 박스
 >
-> - flexible 하게 네트워크 계층 기능들을 SDN으로 구현할 수 있음
+>- flexible 하게 네트워크 계층 기능들을 SDN으로 구현할 수 있음
 >- 2005년 : 네트워크 제어 재설정에 대한 새로워진 관심
 >
 >- 왜 논리적으로 중앙 집중식 제어 계획일까?
@@ -3308,7 +3306,7 @@
 >>
 >>>![image-20201118160736707](README.assets/image-20201118160736707.png)
 >>>
->>>- **네트워크 제어 앱에 대한 인터페이스 레이어** : 추상화 API
+>>>- **네트워크 제어 앱에 대한 인터페이스 레이어**(network control application) : 추상화 API
 >>>- **네트워크 전체 상태 관리 계층** : 네트워크 링크, 스위치, 서비스 상태 : 분산 데이터베이스 - State Management
 >>>- **통신 레이어** : SDN 컨트롤러와 제어 스위치 간 통신
 >>>- 각각의 계층으로 나눠져서 수행
@@ -3370,9 +3368,13 @@
 >>>
 >>>먼저 인터넷에 접근하기 위해 AP(Access Point)를 검색한다. 처음으로 인터넷 연결하는 거기 때문에 클라이언트에게는 IP가 없다. IP주소를 할당 받기 위해 DHCP가 동작해서 IP주소를 얻는다.
 >>>
+>>>비번 프로토콜도 추가된다. 
+>>>
 >>>추후 인터넷에서 접근하고자 하는 사이트의 도메인 네임을 IP주소로 변화하는 DNS프로토콜이 사용된다. 
 >>>
->>>현재 클라이언트는 로컬 DNS 서버의 MAC 주소를 모른다. 이를 알아내기 위해 ARP(Address Resolution Protocol)를 사용한다.
+>>>현재 클라이언트는 로컬 DNS 서버의 MAC 주소를 모른다. 정확히 AP가 내 IP를 모르는 것이다. 
+>>>
+>>>이를 알아내기 위해 ARP(Address Resolution Protocol) (내부IP에서만)를 사용한다.
 >>>
 >>>이후 로컬DNS MAC주소를 알아낸 이후에 클라이언트는 HTTP GET메세지를 보내기 위해 TCP 소캣을 만든다. 
 >>>
@@ -3400,7 +3402,7 @@
 >>>
 >>>6. 컨트롤러는 OpenFlow를 사용하여 업데이트가 필요한 스위치에 새 테이블에 설치합니다.
 >>>
->>>   s1은 이제부터 s2를 목적지로 하는 패킷을 s4를 통해 보내고 s2는 s1으로부터의 패킷을 중간 스위치 s4를 통해 받고 s4는 s1에서 s2로 가는 패킷을 포워딩 해야한다. 
+>>>  s1은 이제부터 s2를 목적지로 하는 패킷을 s4를 통해 보내고 s2는 s1으로부터의 패킷을 중간 스위치 s4를 통해 받고 s4는 s1에서 s2로 가는 패킷을 포워딩 해야한다. 
 >>
 >>#### SDN: 선택된 도전과제
 >>
@@ -3420,7 +3422,7 @@
 
 >![image-20201120180738920](README.assets/image-20201120180738920.png)
 >
->internet control message protocol 를 의미한다. 
+>**internet control message protocol** 를 의미한다. 
 >
 >구조적으로 ICMP메세지가 IP데이터 그램에 담겨 전송되므로 구조적으로 IP위에 있다.
 >
