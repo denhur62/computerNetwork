@@ -2866,7 +2866,7 @@ ___
 >- 모든 노드에게 net topology와 link costs 정보가 알려짐
 >  - "link state broadcasting"을 통해 알려짐
 >  - 모든 노드들은 같은 정보를 갖는다
->  - OSPF를 사용한다. : AS내의 라우터간에 정보 교환하는 라우팅 프로토콜을 의미한다.
+>  - OSPF를 사용한다 : AS내의 라우터간에 정보 교환하는 라우팅 프로토콜을 의미한다.
 > 
 >- 하나의 노드(출발지)에서 다른 노드(도착지)까지 최소 비용 경로를 연산한다.
 > 
@@ -2943,10 +2943,11 @@ ___
 
 >![image-20201113170748012](README.assets/image-20201113170748012.png)
 >
+>
 >![image-20201113170803323](README.assets/image-20201113170803323.png)
 >
->![image-20201113170811344](README.assets/image-20201113170811344.png)
 >
+>![image-20201113170811344](README.assets/image-20201113170811344.png)
 >
 
 #### intra AS routing in the Internet: OSPF
@@ -2954,13 +2955,14 @@ ___
 >#### Making routing scalable(확장 가능한 라우팅 만들기)
 >
 >>- 모든 라우터가 동일 해야함
+>>
 >>- 네트워크 "flat" 실제로는 사실이 아님
 >>
 >>  **scale** : 수십억의 목적지를 가지려면
->>
+>
 >> - 라우팅 테이블에 모든 대상을 저장할 수 없음
 >> - 라우팅 테이블 교환은 링크가 될 것
->>
+>
 >>   행정 차지(**administrative autonomy**)
 >> - 인터넷 = 네트워크의 네트워크
 >> - 각 네트워크 관리자는 자체 네트워크에서 라우팅을 제어할 수 있음
@@ -2969,7 +2971,7 @@ ___
 >
 >>- 라우터가 수억개 + 외부 네트워크에 연결하면서도 자신이 원하는 대로 네트워크 운영하고 관리=**AS**
 >>-  라우터를 &quot;자율 시스템(**autonomous system, AS, 도메인**)&quot;으로 알려진 영역으로 집합
->>
+>
 >>   intra-AS 라우팅
 >>  - 호스트간 라우팅, 동일한 AS의 라우터
 >>  - AS의 모든 라우터는 일부 도메인 내 프로토콜을 실행해야한다.
@@ -2981,47 +2983,42 @@ ___
 >#### 상호연결된 ASes 
 >
 >>![image-20201105220714581](README.assets/image-20201105220714581.png)
->>
->>* 인트라 및 AS간 라우팅 알고리즘으로 구성된 전달 테이블(forwarding table)
->>
->> 내부 AS 라우팅은 AS 내 목적지에 대한 항목을 결정
->>
->> 외부 목적지에 대한 AS 간 및 내부 AS 결정항목
->>
->>3개의 ASes를 LG, SK, KT라 가정하고 각각의 라우터에서 forwarding table 을 업데이트 하는 방식
+>
+>인트라 및 AS간 라우팅 알고리즘으로 구성된 전달 테이블(forwarding table)
+>
+>​	내부 AS 라우팅은 AS 내 목적지에 대한 항목을 결정
+>
+>​	외부 목적지에 대한 AS 간 및 내부 AS 결정항목
+>
+>​	3개의 ASes를 LG, SK, KT라 가정하고 각각의 라우터에서 forwarding table 을 업데이트 하는 방식
 >
 >#### Inter AS tasks
 >
 >>![image-20201105220933837](README.assets/image-20201105220933837.png)
->>
->>* AS1 라우터가 AS1 외부로 향하는 데이터그램을 받았다 가정
->>
->>  라우터는 게이트웨이 라우터로 패킷을 전달해야 하지만 어느 라우터를 사용해야 하는가?
->>
->>* AS1 라우터가 반드시 해야한다.
->>
->>  AS3 를 통해 AS2 가 어느정도까지 도달할 수 있는지 익히기
->>
->>  AS1의 모든 라우터에 도달 가능성 정보를 전파(도달할 수 있는 정보를 가지고 있어야 함)
->>
->>  AS간 라우팅 작업
+>
+>AS1 라우터가 AS1 외부로 향하는 데이터그램을 받았다 가정
+>
+>​	라우터는 게이트웨이 라우터로 패킷을 전달해야 하지만 어느 라우터를 사용해야 하는가?
+>
+>AS1 라우터가 반드시 해야한다.
+>
+>​	AS3 를 통해 AS2 가 어느정도까지 도달할 수 있는지 익히기
+>
+>AS1의 모든 라우터에 도달 가능성 정보를 전파(도달할 수 있는 정보를 가지고 있어야 함)
+>
+>AS간 라우팅 작업
 >
 >#### Intra-AS Routing(라우팅)(기말-차이점) 
 >
 >>- 내부 게이트웨이 프로토콜(**interior gateway protocols, IGP**)이라고 함
->>
 >>- 즉 같은 자치 시스템(AS) 내부에 호스트와 라우터들 간의 라우팅 방식, 같은 영역 내에 라우터들은 같은 인트라 도메인 프로토콜(**intra domain protocol**) 을 수행한다.
->>
->>  가장 일반적인 intra-AS 라우팅 프로토콜
->>
+>
+>가장 일반적인 intra-AS 라우팅 프로토콜
+>
 >> - RIP : Routing Information Protocol 라우팅 정보 프로토콜 
->>   
->>   - RIP는 5개? RIPv2는 250개?
->>   
+>> - RIP는 5개? RIPv2는 250개?
 >> - OSPF : Open Shortest Path First(본질적으로 OSPF와 동일한 IS-IS 프로토콜)
->>   
->>   - 알고리즘 이름을 프로토콜 이름으로 정함
->>   
+>> - 알고리즘 이름을 프로토콜 이름으로 정함
 >> - IGRP : Internet Gateway Routing Protocol (Cisco가 2016년까지 수십년간 독점적으로 운영)
 >
 >#### Inter-AS routring
@@ -3032,50 +3029,50 @@ ___
 >
 >#### OSPF (Open Shortest Path First)
 >
->>- "open" : 공개적으로 이용가능하다.
+>>"open" : 공개적으로 이용가능하다.
 >>
->>- 링크 상태 알고리즘을 사용한다.
->>
->>  링크 상태 패킷 보급
->>
->>  각 노드의 topology 맵
->>
->>  link state 알고리즘 이용 -> 다익스트라 알고리즘으로 경로 연산
->>
+>>링크 상태 알고리즘을 사용한다.
+>
+>링크 상태 패킷 보급
+>
+>각 노드의 topology 맵
+>
+>link state 알고리즘 이용 -> 다익스트라 알고리즘으로 경로 연산
+>
 >>- OSPF advertisement는 이웃 당 하나의 엔트리를 전달하며 advertisements는 전체 AS에게 flood
 >>
->> TCP나 UDP 대신에 IP로 직접 OSPF 메시지 전달
+>>  TCP나 UDP 대신에 IP로 직접 OSPF 메시지 전달
 >>
->> - **IS-IS routing protocol**: OSPF와 거의 동일
->>
+>>  **IS-IS routing protocol**: OSPF와 거의 동일
+>
 >>#### OSPF "advanced" features (not in RIP)
->>
+>
 >>> - **security**: 모든 OSPF 메시지는 인증됨(authenticated) -> 악의적인 침입을 막기 위해
 >>>
 >>> - **여러개의 같은 cost 경로를 허용** (RIP는 하나의 경로만 허용)
 >>>
->>>   - cost가 같은 경로 여러개이면 나눠서 보냄 => 속도↑
+>>> - cost가 같은 경로 여러개이면 나눠서 보냄 => 속도↑
 >>>
 >>> - 각 link에 대해 서로 다른 **TOS**에 대한 여러 cost 행렬 (예: best effort ToS에 대해 낮음으로 설정된 위성 링크 비용, 실시간 ToS에 대해 높음)
 >>>
->>>   tos=(Type of Serivce)  로 서비스 유형, 혼잡 알림을 나타낸다.
+>>> - tos=(Type of Serivce)  로 서비스 유형, 혼잡 알림을 나타낸다.
 >>>
 >>>   통합된 uni-cast 와 **multicast** 지원:
 >>>
->>>   * Multicast OSPF (MOSPF)는 OSPF 기반의 동일한 토포로지 데이터를 사용한다
+>>>   Multicast OSPF (MOSPF)는 OSPF 기반의 동일한 토포로지 데이터를 사용한다
 >>>
->>> - **계층적인** OSPF in large domains
+>>>   **계층적인** OSPF in large domains
 >
 >**Hierarchical OSPF**
 >
 >>![image-20201105221132900](README.assets/image-20201105221132900.png)
->>
+>
 >>- **two-level hierarchy**: local area, backbone.
->>
+>
 >>  link-state advertisements는 영역 안에서만 일어남
->>
+>
 >>  각 노드에는 자세한 영역 토폴로지가 있다.
->>
+>
 >>  다른 지역은 net로 가는 방향(최단 경로)만 안다
 >>- **area border routers**: 자신의 영역 안의 nets까지의 거리를 요약하여 다른 영역 경계 라우터에게 알린다.
 >>- **backbone routers**: 백본으로 제한된 OSPF 라우팅을 실행 즉 AS내 영역 간의 트래픽을 라우팅 함.
