@@ -14,9 +14,9 @@
 
 ## [Chapter 3 Transport Layer](#Transport-Layer)
 
-## [Chapter 4 Network Layer](#Network-Layer-The-Control-Plane)
+## [Chapter 4 Network Layer](#Network-Layer)
 
-## [Chapter 5 Control Plane](#Control-Plane)
+## [Chapter 5 Control Plane](#Network-Layer-The-Control-Plane)
 
 ## [Chapter 6 THe Link Layer and Lans](#THe-Link-Layer-and-Lans)
 
