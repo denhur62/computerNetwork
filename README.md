@@ -8,7 +8,19 @@
 
 #### Sejong University 김영복 교수님 교재 및 PDF 요약본 입니다.
 
-# [1.stack](#network)
+## [Chapter 1 Introduction](#host)
+
+## [Chapter 2 Application Layer](#Application-Layer)
+
+## [Chapter 3 Transport Layer](#Transport-Layer)
+
+## [Chapter 4 Network Layer](#Network-Layer-The-Control-Plane)
+
+## [Chapter 5 Control Plane](#Control-Plane)
+
+## [Chapter 6 THe Link Layer and Lans](#THe-Link-Layer-and-Lans)
+
+
 
 ### host
 
@@ -62,8 +74,6 @@
 >또한 서비스를 제공하는 센터와 가까울 수록 전송 속도가 빠르다는 특징과
 >
 >SDSL을 제외한 xDSL은 Fulld duplex 방식으로 동작하고 상향, 하향전송 속도가 다르거나 혹은 같다.
-
-## network
 
 #### ADSL
 
@@ -248,6 +258,10 @@
 >  '개방형 시스템(Open System)' 의 설계
 >
 >  - 활짝 열고 널리 알려서 많은 사람이 따르도록 유도
+
+
+
+# Application Layer
 
 #### OSI 7 layer
 
@@ -1029,6 +1043,12 @@
 >>>  - 클라이언트와 연결되면 서버 TCP는 서버 프로세스가 해당 특정 클라이언트와 통신 할 수 있도록 새로운 소켓을 만든다.
 >>>    - 서버가 여러 클라이언트와 대화할 수 있다.
 >>>    - 클라이언트를 구별하는데 사용되는 source port numbers
+
+
+
+# Transport Layer
+
+
 
 #### 트랜스 포트 계층
 
@@ -2027,9 +2047,7 @@
 
 
 
-### 네트워크 계층
-
-___
+# Network Layer
 
 
 
@@ -2774,9 +2792,7 @@ ___
 
 
 
-### Network Layer: The Control Plane
-
----
+# Network Layer The Control Plane
 
 
 
@@ -3567,9 +3583,7 @@ ___
 
 
 
-### THe Link Layer and Lans
-
-___
+# THe Link Layer and Lans
 
 
 
