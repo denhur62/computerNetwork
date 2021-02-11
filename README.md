@@ -1,6 +1,14 @@
-# 컴퓨터 네트워크 용어 정리
+# Computer Networking: A Top‑Down 7th edition
 
-2020 2학기 김영복 컴퓨터 네트워크 정리본 입니다.  
+
+
+![image-20210212032521469](README.assets/image-20210212032521469.png)
+
+
+
+#### Sejong University 김영복 교수님 교재 및 PDF 요약본 입니다.
+
+# [1.stack](#network)
 
 ### host
 
@@ -54,6 +62,8 @@
 >또한 서비스를 제공하는 센터와 가까울 수록 전송 속도가 빠르다는 특징과
 >
 >SDSL을 제외한 xDSL은 Fulld duplex 방식으로 동작하고 상향, 하향전송 속도가 다르거나 혹은 같다.
+
+## network
 
 #### ADSL
 
